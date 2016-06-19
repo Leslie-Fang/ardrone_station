@@ -20,10 +20,6 @@
 #define image_area_width 480
 #define image_area_height 360
 
-//相机参数（mm）
-#define camera_APS_width 23.5
-#define camera_APS_height 15.6
-#define camera_focal_length 20.0
 
 using namespace std;
 

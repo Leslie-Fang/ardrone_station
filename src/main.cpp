@@ -7,11 +7,13 @@
 #include "painterWiget.h"
 #include "camera.h"
 #include "camera2.h"
+#include "camera_calibration.h"
 #include <QTextCodec>
 
 MavrosMessage message;
 Camera camera_video;
 Camera camera2_video;
+Camera_Calibration camera_calibration;
 
 int main(int argc, char *argv[])
 {

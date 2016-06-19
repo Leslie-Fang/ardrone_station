@@ -6,10 +6,12 @@
 #include "QDesktopWidget"
 #include "camera.h"
 #include "camera2.h"
+#include "camera_calibration.h"
 
 extern MavrosMessage message;
 extern Camera camera_video;
 extern Camera2 camera2_video;
+extern Camera_Calibration camera_calibration;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(&camera_video,SIGNAL(camera_Image_Signal()),this,SLOT(camera_Image_Slot()));
     QObject::connect(&camera2_video,SIGNAL(camera_Image_Signal()),this,SLOT(camera2_Image_Slot()));
+    QObject::connect(&camera_calibration,SIGNAL(camera_Image_Signal()),this,SLOT(camera_calibration_Image_Slot()));
+    QObject::connect(&camera_calibration,SIGNAL(image_Save_Signal()),this,SLOT(calibration_Save_Image_Slot()));
 
     init_paras();
 
@@ -72,6 +76,14 @@ MainWindow::MainWindow(QWidget *parent) :
     fly_position_label->setFixedWidth(FLY_POSITION_LABEL_WIDTH);
     fly_position_label->setFixedHeight(FLY_POSITION_LABEL_HEIGHT);
     fly_position_label->move(0,0);
+
+    ui->comboBox_Cube_Length->setCurrentIndex(4);
+
+    ui->pushButton_Open_Video_Calibration->setEnabled(true);
+    ui->pushButton_Close_Video_Calibration->setEnabled(false);
+    ui->pushButton_Video_Calibration_Save->setEnabled(false);
+    ui->pushButton_Video_Calibration_Start->setEnabled(false);
+
 
     //设置是否可用
     //ui->progressBar_GPS->setRange(0,15);
@@ -280,7 +292,6 @@ void MainWindow::camera2_Image_Slot()
 
 void MainWindow::on_pushButton_Open_Video_2_clicked()
 {
-    camera2_video.openCamara();
     ui->pushButton_Open_Video_2->setEnabled(false);
     ui->pushButton_Close_Video_2->setEnabled(true);
 }
@@ -291,4 +302,59 @@ void MainWindow::on_pushButton_Close_Video_2_clicked()
     camera2_video.closeCamara();
     ui->pushButton_Open_Video_2->setEnabled(true);
     ui->pushButton_Close_Video_2->setEnabled(false);
+}
+
+void MainWindow::camera_calibration_Image_Slot()
+{
+    ui->label_Camera_Calibration->setPixmap(QPixmap::fromImage(camera_calibration.image));//视频
+}
+
+void MainWindow::on_pushButton_Open_Video_Calibration_clicked()
+{
+    camera_calibration.camera_seq = ui->comboBox_Camera_Calibration->currentIndex()+1;
+    if(camera_calibration.openCamara())
+    {
+        ui->pushButton_Open_Video_Calibration->setEnabled(false);
+        ui->pushButton_Close_Video_Calibration->setEnabled(true);
+        ui->pushButton_Video_Calibration_Save->setEnabled(true);
+        ui->pushButton_Video_Calibration_Start->setEnabled(false);
+    }
+    else
+    {
+        QMessageBox message_box(QMessageBox::Warning,"警告","未检测到该摄像头!", QMessageBox::Ok, NULL);
+        message_box.exec();
+    }
+}
+
+void MainWindow::on_pushButton_Close_Video_Calibration_clicked()
+{
+    camera_calibration.closeCamara();
+    ui->pushButton_Open_Video_Calibration->setEnabled(true);
+    ui->pushButton_Close_Video_Calibration->setEnabled(false);
+    ui->pushButton_Video_Calibration_Save->setEnabled(false);
+    ui->pushButton_Video_Calibration_Start->setEnabled(false);
+}
+
+void MainWindow::on_comboBox_Camera_Calibration_currentIndexChanged(int index)
+{
+    camera_calibration.camera_seq = index + 1;
+}
+
+void MainWindow::on_pushButton_Video_Calibration_Save_clicked()
+{
+    camera_calibration.takingPictures();
+    if(camera_calibration.total_number > 3) ui->pushButton_Video_Calibration_Start->setEnabled(true);
+}
+
+void MainWindow::calibration_Save_Image_Slot()
+{
+    ui->textBrowser_Calibratiob->append(tr("Get Image ")+QString::number(camera_calibration.image_counter));
+}
+
+void MainWindow::on_pushButton_Video_Calibration_Start_clicked()
+{
+    camera_calibration.cube_length = ui->comboBox_Cube_Length->currentIndex() + 3;
+    camera_calibration.cube_width = camera_calibration.cube_length;
+
+    camera_calibration.calibration();
 }

@@ -20,6 +20,7 @@ set(qt_srcs
       src/main.cpp
       src/mainwindow.cpp
       src/painterWiget.cpp
+      
    )
 set(qt_hdrs
       src/mainwindow.h
@@ -27,11 +28,12 @@ set(qt_hdrs
       src/painterWiget.h
       src/camera.h
       src/camera2.h
+      src/camera_calibration.h
    )
 set(qt_resrcs src/Icons.qrc)
 
 qt4_automoc(${qt_srcs})
-QT4_WRAP_CPP(qt_moc_srcs ${qt_hdrs} ${catkin_LIBRARIES} )
+QT4_WRAP_CPP(qt_moc_srcs ${qt_hdrs} ${catkin_LIBRARIES})
 QT4_WRAP_UI(uis_h src/mainwindow.ui)
 QT4_ADD_RESOURCES(qt_resrcs_RCC ${qt_resrcs})
 
@@ -44,7 +46,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 
-add_executable(receiver src/receiver.cpp src/camera.cpp src/camera2.cpp
+add_executable(receiver src/receiver.cpp src/camera.cpp src/camera2.cpp src/camera_calibration.cpp
     ${uis_h} ${qt_srcs} ${qt_moc_srcs} ${qt_resrcs_RCC})
 target_link_libraries(receiver ${QT_LIBRARIES} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(receiver receiver_generate_messages_cpp)

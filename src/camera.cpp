@@ -4,11 +4,8 @@
 #include "stdio.h"
 #include <string>
 #include <iostream>
-#include "receiver.h"
 
 using namespace std;
-
-extern MavrosMessage message;
 
 
 Camera::Camera()
@@ -42,7 +39,7 @@ void Camera::run()
 
 void Camera::openCamara()
 {
-    cam = cvCreateCameraCapture(0);//打开摄像头，从摄像头中获取视频
+    cam = cvCreateCameraCapture(1);//打开摄像头，从摄像头中获取视频
 
     //设定捕获图像大小及帧率
     cvSetCaptureProperty(cam,CV_CAP_PROP_FPS,30);
@@ -59,8 +56,7 @@ void Camera::readFarme()
     IplImage* frame_raw = cvQueryFrame(cam);// 从摄像头中抓取并返回每一帧
 
     //窗口大小适应
-    if(frame_raw->height>image_area_height||frame_raw->width>image_area_width)frame=cvCreateImage(cvSize(image_area_width,image_area_height),8,3);//4:3画面
-    else frame=frame_raw;
+    frame=cvCreateImage(cvSize(image_area_width,image_area_height),8,3);//4:3画面
     cvResize(frame_raw,frame,CV_INTER_NN);
 
      // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。

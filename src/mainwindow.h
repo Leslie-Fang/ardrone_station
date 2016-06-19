@@ -50,7 +50,6 @@
 #define PI 3.14159265358979323846
 #define PI_2 1.57079632679489661923
 
-#define DBL_EPSILON 2.2204460492503131e-16
 #define CONSTANTS_RADIUS_OF_EARTH 6371393
 
 #define MAX_POINT_NUM 1000
@@ -98,12 +97,22 @@ private slots:
     /*video*/
     void camera_Image_Slot();//摄像头图像显示
     void camera2_Image_Slot();//摄像头图像显示
+    void camera_calibration_Image_Slot();
+    void calibration_Save_Image_Slot();
 
     void on_pushButton_Open_Video_clicked();
     void on_pushButton_Close_Video_clicked();
 
     void on_pushButton_Open_Video_2_clicked();
     void on_pushButton_Close_Video_2_clicked();
+
+    void on_pushButton_Open_Video_Calibration_clicked();
+    void on_comboBox_Camera_Calibration_currentIndexChanged(int index);
+    void on_pushButton_Close_Video_Calibration_clicked();
+
+    void on_pushButton_Video_Calibration_Save_clicked();
+
+    void on_pushButton_Video_Calibration_Start_clicked();
 
 private:
     Ui::MainWindow *ui;
