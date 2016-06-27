@@ -12,7 +12,7 @@
 
 MavrosMessage message;
 Camera camera_video;
-Camera camera2_video;
+Camera2 camera2_video;
 Camera_Calibration camera_calibration;
 
 int main(int argc, char *argv[])

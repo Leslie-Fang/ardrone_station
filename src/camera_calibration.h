@@ -18,7 +18,7 @@
 #define calibration_image_area_height 540
 
 #define raw_image_area_width_c 720
-#define raw_image_area_height_c 540
+#define raw_image_area_height_c 480
 
 using namespace std;
 

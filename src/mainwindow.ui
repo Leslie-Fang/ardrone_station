@@ -49,7 +49,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -137,7 +137,7 @@
         <rect>
          <x>730</x>
          <y>418</y>
-         <width>430</width>
+         <width>371</width>
          <height>42</height>
         </rect>
        </property>
@@ -557,7 +557,7 @@
         <rect>
          <x>42</x>
          <y>421</y>
-         <width>430</width>
+         <width>371</width>
          <height>42</height>
         </rect>
        </property>
@@ -3739,6 +3739,90 @@
         </widget>
        </widget>
       </widget>
+      <widget class="QFrame" name="frame">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>410</y>
+         <width>101</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>65</width>
+          <height>52</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_91">
+         <item>
+          <widget class="QRadioButton" name="radioButton_left_1">
+           <property name="text">
+            <string>left</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_right_1">
+           <property name="text">
+            <string>right</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QFrame" name="frame_2">
+       <property name="geometry">
+        <rect>
+         <x>1120</x>
+         <y>410</y>
+         <width>101</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget_30">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>65</width>
+          <height>52</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_94">
+         <item>
+          <widget class="QRadioButton" name="radioButton_left_2">
+           <property name="text">
+            <string>left</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_right_2">
+           <property name="text">
+            <string>right</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
       <zorder>layoutWidget</zorder>
       <zorder>label_Camera</zorder>
       <zorder>layoutWidget_6</zorder>
@@ -3755,6 +3839,8 @@
       <zorder>tabWidget_Camera_2</zorder>
       <zorder>tabWidget_Camera_3</zorder>
       <zorder>tabWidget_Camera_4</zorder>
+      <zorder>frame</zorder>
+      <zorder>frame_2</zorder>
      </widget>
      <widget class="QTabWidget" name="tabWidget_PaintArea">
       <property name="geometry">

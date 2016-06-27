@@ -19,6 +19,8 @@ float cross_points_real_position_left_enemy[5][5][2];
 
 Camera::Camera()
 {
+    //camera_number = 0;
+
     cam = NULL;
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(readFarme()));
@@ -66,7 +68,9 @@ Camera::~Camera()
 
 void Camera::init_paras()
 {
-    camera_left_side = false;
+    if_read = false;
+
+    //camera_left_side = false;
     camera_enemy_side = true;
 
     neg_d = 20;
@@ -106,7 +110,7 @@ bool Camera::openCamara()
         cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,raw_image_area_width);
         cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,raw_image_area_height);
 
-        timer->start(33);              // 开始计时，超时则发出timeout()信号，30帧/s
+        timer->start(100);              // 开始计时，超时则发出timeout()信号，10帧/s
         bool_open_camera=true;
 
         return true;
@@ -114,8 +118,10 @@ bool Camera::openCamara()
 
 }
 
+
 int Camera::readFarme()
 {
+    cout<<"running*************\n";
     //cvNamedWindow("video",1);
     IplImage* frame_raw = cvQueryFrame(cam);// 从摄像头中抓取并返回每一帧
 

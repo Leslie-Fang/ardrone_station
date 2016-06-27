@@ -119,6 +119,9 @@ void MainWindow::init_paras()
 {
     read_saved_paras();
 
+    camera_video.camera_number = 0;
+    camera2_video.camera_number = 1;
+
     ui->horizontalSlider_H_Min_Blue->setValue(camera_video.color_threshold[0][0]);
     ui->horizontalSlider_H_Max_Blue->setValue(camera_video.color_threshold[0][1]);
     ui->horizontalSlider_S_Min_Blue->setValue(camera_video.color_threshold[0][2]);
@@ -127,7 +130,8 @@ void MainWindow::init_paras()
     ui->horizontalSlider_V_Max_Blue->setValue(camera_video.color_threshold[0][5]);
 
     ui->horizontalSlider_H_Min_Yellow->setValue(camera_video.color_threshold[1][0]);
-    ui->horizontalSlider_S_Min_Yellow->setValue(camera_video.color_threshold[1][1]);
+    ui->horizontalSlider_H_Max_Yellow->setValue(camera_video.color_threshold[1][1]);
+    ui->horizontalSlider_S_Min_Yellow->setValue(camera_video.color_threshold[1][2]);
     ui->horizontalSlider_S_Max_Yellow->setValue(camera_video.color_threshold[1][3]);
     ui->horizontalSlider_V_Min_Yellow->setValue(camera_video.color_threshold[1][4]);
     ui->horizontalSlider_V_Max_Yellow->setValue(camera_video.color_threshold[1][5]);
@@ -152,6 +156,47 @@ void MainWindow::init_paras()
     ui->horizontalSlider_S_Max_Black->setValue(camera_video.color_threshold[4][3]);
     ui->horizontalSlider_V_Min_Black->setValue(camera_video.color_threshold[4][4]);
     ui->horizontalSlider_V_Max_Black->setValue(camera_video.color_threshold[4][5]);
+
+    ui->horizontalSlider_H_Min_Blue_2->setValue(camera2_video.color_threshold[0][0]);
+    ui->horizontalSlider_H_Max_Blue_2->setValue(camera2_video.color_threshold[0][1]);
+    ui->horizontalSlider_S_Min_Blue_2->setValue(camera2_video.color_threshold[0][2]);
+    ui->horizontalSlider_S_Max_Blue_2->setValue(camera2_video.color_threshold[0][3]);
+    ui->horizontalSlider_V_Min_Blue_2->setValue(camera2_video.color_threshold[0][4]);
+    ui->horizontalSlider_V_Max_Blue_2->setValue(camera2_video.color_threshold[0][5]);
+
+    ui->horizontalSlider_H_Min_Yellow_2->setValue(camera2_video.color_threshold[1][0]);
+    ui->horizontalSlider_H_Max_Yellow_2->setValue(camera2_video.color_threshold[1][1]);
+    ui->horizontalSlider_S_Min_Yellow_2->setValue(camera2_video.color_threshold[1][2]);
+    ui->horizontalSlider_S_Max_Yellow_2->setValue(camera2_video.color_threshold[1][3]);
+    ui->horizontalSlider_V_Min_Yellow_2->setValue(camera2_video.color_threshold[1][4]);
+    ui->horizontalSlider_V_Max_Yellow_2->setValue(camera2_video.color_threshold[1][5]);
+
+    ui->horizontalSlider_H_Min_Red_2->setValue(camera2_video.color_threshold[2][0]);
+    ui->horizontalSlider_H_Max_Red_2->setValue(camera2_video.color_threshold[2][1]);
+    ui->horizontalSlider_S_Min_Red_2->setValue(camera2_video.color_threshold[2][2]);
+    ui->horizontalSlider_S_Max_Red_2->setValue(camera2_video.color_threshold[2][3]);
+    ui->horizontalSlider_V_Min_Red_2->setValue(camera2_video.color_threshold[2][4]);
+    ui->horizontalSlider_V_Max_Red_2->setValue(camera2_video.color_threshold[2][5]);
+
+    ui->horizontalSlider_H_Min_White_2->setValue(camera2_video.color_threshold[3][0]);
+    ui->horizontalSlider_H_Max_White_2->setValue(camera2_video.color_threshold[3][1]);
+    ui->horizontalSlider_S_Min_White_2->setValue(camera2_video.color_threshold[3][2]);
+    ui->horizontalSlider_S_Max_White_2->setValue(camera2_video.color_threshold[3][3]);
+    ui->horizontalSlider_V_Min_White_2->setValue(camera2_video.color_threshold[3][4]);
+    ui->horizontalSlider_V_Max_White_2->setValue(camera2_video.color_threshold[3][5]);
+
+    ui->horizontalSlider_H_Min_Black_2->setValue(camera2_video.color_threshold[4][0]);
+    ui->horizontalSlider_H_Max_Black_2->setValue(camera2_video.color_threshold[4][1]);
+    ui->horizontalSlider_S_Min_Black_2->setValue(camera2_video.color_threshold[4][2]);
+    ui->horizontalSlider_S_Max_Black_2->setValue(camera2_video.color_threshold[4][3]);
+    ui->horizontalSlider_V_Min_Black_2->setValue(camera2_video.color_threshold[4][4]);
+    ui->horizontalSlider_V_Max_Black_2->setValue(camera2_video.color_threshold[4][5]);
+
+    ui->radioButton_left_1->setChecked(true);
+    ui->radioButton_right_2->setChecked(true);
+
+    camera_video.camera_left_side = true;
+    camera2_video.camera_left_side = false;
 }
 
 int MainWindow::read_saved_paras()
@@ -196,6 +241,40 @@ int MainWindow::read_saved_paras()
         read_counter ++;
     }
     config_f1.close(); //reading finished
+
+    char path2[100];
+    strcpy(path2,dir_path);
+    char name2[17] = "/camera_2.txt";
+    strcat(path2,name2);
+
+    fstream config_f2;
+    config_f2.open(path2,ios::in);
+
+    int read_counter2=0;
+    while(!config_f2.eof())
+    {   //while not the end of file
+        char str[30];
+        config_f2 >> str;
+
+        int num = 0;
+        int start_place = 0;
+        for(int i=0;i<30;i++)
+        {
+            if(str[i]=='#') { start_place = i; break;}
+        }
+
+        for(int j=start_place-1, times=1; j>=0; j--)
+        {
+            num += (str[j]-'0') * times;
+            times *= 10;
+        }
+        camera2_video.color_threshold[read_counter2/6][read_counter2%6] = num;
+        //cout<<camera_video.color_threshold[read_counter/6][read_counter%6]<<endl;
+
+        read_counter2 ++;
+    }
+    config_f2.close(); //reading finished
+
     cout<<"parameter reading finished!"<<endl;
 
 }
@@ -311,6 +390,31 @@ int MainWindow::on_pushButton_Save_Config_clicked()
 
     fclose(pTxtFile1);
 
+    //parameters for camera 2
+    char path2[100];
+    strcpy(path2,dir_path);
+    char name2[17] = "/camera_2.txt";
+    strcat(path2,name2);
+
+    FILE *pTxtFile2 = NULL;
+
+    pTxtFile2 = fopen(path2, "w+");
+    if (pTxtFile2 == NULL)
+    {
+        printf("The program exist!\n");
+        return 0;
+    }
+
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<6;j++)
+        {
+            fprintf(pTxtFile2,"%d#\n",camera2_video.color_threshold[i][j]);
+        }
+    }
+
+    fclose(pTxtFile2);
+
     /*
     char path2[100];
     strcpy(path2,dir_path);
@@ -371,6 +475,15 @@ void MainWindow::on_pushButton_Close_Video_clicked()
     ui->pushButton_Close_Video->setEnabled(false);
 }
 
+void MainWindow::on_checkBox_clicked()
+{
+    if(ui->checkBox->isChecked())
+    {
+        on_pushButton_Range_Update_clicked();
+        camera_video.bool_fill_color = true;
+    }
+    else camera_video.bool_fill_color = false;
+}
 
 
 void MainWindow::on_pushButton_Open_Video_2_clicked()
@@ -424,6 +537,16 @@ void MainWindow::on_pushButton_Open_Video_Calibration_clicked()
     }
 }
 
+void MainWindow::on_checkBox_2_clicked()
+{
+    if(ui->checkBox_2->isChecked())
+    {
+        on_pushButton_Range_Update_2_clicked();
+        camera2_video.bool_fill_color = true;
+    }
+    else camera2_video.bool_fill_color = false;
+}
+
 void MainWindow::on_pushButton_Close_Video_Calibration_clicked()
 {
     camera_calibration.closeCamara();
@@ -457,15 +580,6 @@ void MainWindow::on_pushButton_Video_Calibration_Start_clicked()
     camera_calibration.calibration();
 }
 
-void MainWindow::on_checkBox_clicked()
-{
-    if(ui->checkBox->isChecked())
-    {
-        on_pushButton_Range_Update_clicked();
-        camera_video.bool_fill_color = true;
-    }
-    else camera_video.bool_fill_color = false;
-}
 
 void MainWindow::on_pushButton_Range_Update_clicked()
 {
@@ -506,17 +620,63 @@ void MainWindow::on_pushButton_Range_Update_clicked()
 
 }
 
+void MainWindow::on_pushButton_Range_Update_2_clicked()
+{
+    camera2_video.color_threshold[0][0] = ui->horizontalSlider_H_Min_Blue_2->value();
+    camera2_video.color_threshold[0][1] = ui->horizontalSlider_H_Max_Blue_2->value();
+    camera2_video.color_threshold[0][2] = ui->horizontalSlider_S_Min_Blue_2->value();
+    camera2_video.color_threshold[0][3] = ui->horizontalSlider_S_Max_Blue_2->value();
+    camera2_video.color_threshold[0][4] = ui->horizontalSlider_V_Min_Blue_2->value();
+    camera2_video.color_threshold[0][5] = ui->horizontalSlider_V_Max_Blue_2->value();
+
+    camera2_video.color_threshold[1][0] = ui->horizontalSlider_H_Min_Yellow_2->value();
+    camera2_video.color_threshold[1][1] = ui->horizontalSlider_H_Max_Yellow_2->value();
+    camera2_video.color_threshold[1][2] = ui->horizontalSlider_S_Min_Yellow_2->value();
+    camera2_video.color_threshold[1][3] = ui->horizontalSlider_S_Max_Yellow_2->value();
+    camera2_video.color_threshold[1][4] = ui->horizontalSlider_V_Min_Yellow_2->value();
+    camera2_video.color_threshold[1][5] = ui->horizontalSlider_V_Max_Yellow_2->value();
+
+    camera2_video.color_threshold[2][0] = ui->horizontalSlider_H_Min_Red_2->value();
+    camera2_video.color_threshold[2][1] = ui->horizontalSlider_H_Max_Red_2->value();
+    camera2_video.color_threshold[2][2] = ui->horizontalSlider_S_Min_Red_2->value();
+    camera2_video.color_threshold[2][3] = ui->horizontalSlider_S_Max_Red_2->value();
+    camera2_video.color_threshold[2][4] = ui->horizontalSlider_V_Min_Red_2->value();
+    camera2_video.color_threshold[2][5] = ui->horizontalSlider_V_Max_Red_2->value();
+
+    camera2_video.color_threshold[3][0] = ui->horizontalSlider_H_Min_White_2->value();
+    camera2_video.color_threshold[3][1] = ui->horizontalSlider_H_Max_White_2->value();
+    camera2_video.color_threshold[3][2] = ui->horizontalSlider_S_Min_White_2->value();
+    camera2_video.color_threshold[3][3] = ui->horizontalSlider_S_Max_White_2->value();
+    camera2_video.color_threshold[3][4] = ui->horizontalSlider_V_Min_White_2->value();
+    camera2_video.color_threshold[3][5] = ui->horizontalSlider_V_Max_White_2->value();
+
+    camera2_video.color_threshold[4][0] = ui->horizontalSlider_H_Min_Black_2->value();
+    camera2_video.color_threshold[4][1] = ui->horizontalSlider_H_Max_Black_2->value();
+    camera2_video.color_threshold[4][2] = ui->horizontalSlider_S_Min_Black_2->value();
+    camera2_video.color_threshold[4][3] = ui->horizontalSlider_S_Max_Black_2->value();
+    camera2_video.color_threshold[4][4] = ui->horizontalSlider_V_Min_Black_2->value();
+    camera2_video.color_threshold[4][5] = ui->horizontalSlider_V_Max_Black_2->value();
+}
+
+void MainWindow::on_radioButton_left_1_clicked()
+{
+    camera_video.camera_left_side = true;
+}
+
+void MainWindow::on_radioButton_right_1_clicked()
+{
+    camera_video.camera_left_side = false;
+}
 
 
+void MainWindow::on_radioButton_left_2_clicked()
+{
+    camera2_video.camera_left_side = true;
+}
 
-
-
-
-
-
-
-
-
-
+void MainWindow::on_radioButton_right_2_clicked()
+{
+    camera2_video.camera_left_side = false;
+}
 
 

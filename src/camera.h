@@ -28,7 +28,7 @@
 #define image_area_height 360
 
 #define raw_image_area_width 720
-#define raw_image_area_height 540
+#define raw_image_area_height 480
 
 using namespace std;
 using namespace cv;
@@ -59,12 +59,13 @@ public:
     int neg_d;
     int pos_d ;
 
+    int camera_number;
+
 
 public slots:
     bool openCamara();      // 打开摄像头
     int readFarme();       // 读取当前帧信息
     void closeCamara();     // 关闭摄像头。
-
 
 private:
     QTimer *timer;
@@ -81,6 +82,8 @@ private:
     CvScalar yellow;
     int line_thickness;
     float optical_distance_last;
+
+    bool if_read;
 
 
     /*position*/

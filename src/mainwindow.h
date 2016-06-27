@@ -118,6 +118,18 @@ private slots:
 
     void on_pushButton_Range_Update_clicked();
 
+    void on_checkBox_2_clicked();
+
+    void on_pushButton_Range_Update_2_clicked();
+
+    void on_radioButton_left_2_clicked();
+
+    void on_radioButton_right_2_clicked();
+
+    void on_radioButton_left_1_clicked();
+
+    void on_radioButton_right_1_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;
