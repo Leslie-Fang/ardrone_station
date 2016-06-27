@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include <string>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -14,15 +15,10 @@ Camera2::Camera2()
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(readFarme()));
 
-
     bool_show_Image=true;
-
 
     line_thickness=2;
     yellow=cvScalar(0,255,255);
-
-    //测试像素代码
-    //cvNamedWindow("TEST");
 }
 
 Camera2::~Camera2()
@@ -30,23 +26,28 @@ Camera2::~Camera2()
     delete timer;
 }
 
-void Camera2::run()
+
+bool Camera2::openCamara()
 {
-    //openCamara();
-    //readFarme();
-}
+    cam = cvCreateCameraCapture(0);//打开摄像头，从摄像头中获取视频
 
-void Camera2::openCamara()
-{
-    cam = cvCreateCameraCapture(2);//打开摄像头，从摄像头中获取视频
+    if(cam == 0)
+    {
+        bool_open_camera=false;
+        return false;
+    }
+    else
+    {
+        //设定捕获图像大小及帧率
+        cvSetCaptureProperty(cam,CV_CAP_PROP_FPS,30);
+        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,raw_image_area_width_2);
+        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,raw_image_area_height_2);
 
-    //设定捕获图像大小及帧率
-    cvSetCaptureProperty(cam,CV_CAP_PROP_FPS,30);
-    cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,720);
-    cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,540);
+        timer->start(33);              // 开始计时，超时则发出timeout()信号，30帧/s
+        bool_open_camera=true;
 
-    timer->start(33);              // 开始计时，超时则发出timeout()信号，30帧/s
-    bool_open_camera=true;
+        return true;
+    }
 }
 
 void Camera2::readFarme()

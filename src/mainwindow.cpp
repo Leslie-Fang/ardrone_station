@@ -13,6 +13,8 @@ extern Camera camera_video;
 extern Camera2 camera2_video;
 extern Camera_Calibration camera_calibration;
 
+char dir_path[80]="/home/chg/catkin_ws/src/ardrone_station/parameters";
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -84,6 +86,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_Video_Calibration_Save->setEnabled(false);
     ui->pushButton_Video_Calibration_Start->setEnabled(false);
 
+    ui->pushButton_Open_Video->setEnabled(true);
+    ui->pushButton_Close_Video->setEnabled(false);
+
+    ui->pushButton_Open_Video_2->setEnabled(true);
+    ui->pushButton_Close_Video_2->setEnabled(false);
+
+    ui->pushButton_Open_Video_3->setEnabled(true);
+    ui->pushButton_Close_Video_3->setEnabled(false);
+
+    ui->pushButton_Open_Video_4->setEnabled(true);
+    ui->pushButton_Close_Video_4->setEnabled(false);
+
 
     //设置是否可用
     //ui->progressBar_GPS->setRange(0,15);
@@ -104,11 +118,44 @@ MainWindow::~MainWindow()
 void MainWindow::init_paras()
 {
     read_saved_paras();
+
+    ui->horizontalSlider_H_Min_Blue->setValue(camera_video.color_threshold[0][0]);
+    ui->horizontalSlider_H_Max_Blue->setValue(camera_video.color_threshold[0][1]);
+    ui->horizontalSlider_S_Min_Blue->setValue(camera_video.color_threshold[0][2]);
+    ui->horizontalSlider_S_Max_Blue->setValue(camera_video.color_threshold[0][3]);
+    ui->horizontalSlider_V_Min_Blue->setValue(camera_video.color_threshold[0][4]);
+    ui->horizontalSlider_V_Max_Blue->setValue(camera_video.color_threshold[0][5]);
+
+    ui->horizontalSlider_H_Min_Yellow->setValue(camera_video.color_threshold[1][0]);
+    ui->horizontalSlider_S_Min_Yellow->setValue(camera_video.color_threshold[1][1]);
+    ui->horizontalSlider_S_Max_Yellow->setValue(camera_video.color_threshold[1][3]);
+    ui->horizontalSlider_V_Min_Yellow->setValue(camera_video.color_threshold[1][4]);
+    ui->horizontalSlider_V_Max_Yellow->setValue(camera_video.color_threshold[1][5]);
+
+    ui->horizontalSlider_H_Min_Red->setValue(camera_video.color_threshold[2][0]);
+    ui->horizontalSlider_H_Max_Red->setValue(camera_video.color_threshold[2][1]);
+    ui->horizontalSlider_S_Min_Red->setValue(camera_video.color_threshold[2][2]);
+    ui->horizontalSlider_S_Max_Red->setValue(camera_video.color_threshold[2][3]);
+    ui->horizontalSlider_V_Min_Red->setValue(camera_video.color_threshold[2][4]);
+    ui->horizontalSlider_V_Max_Red->setValue(camera_video.color_threshold[2][5]);
+
+    ui->horizontalSlider_H_Min_White->setValue(camera_video.color_threshold[3][0]);
+    ui->horizontalSlider_H_Max_White->setValue(camera_video.color_threshold[3][1]);
+    ui->horizontalSlider_S_Min_White->setValue(camera_video.color_threshold[3][2]);
+    ui->horizontalSlider_S_Max_White->setValue(camera_video.color_threshold[3][3]);
+    ui->horizontalSlider_V_Min_White->setValue(camera_video.color_threshold[3][4]);
+    ui->horizontalSlider_V_Max_White->setValue(camera_video.color_threshold[3][5]);
+
+    ui->horizontalSlider_H_Min_Black->setValue(camera_video.color_threshold[4][0]);
+    ui->horizontalSlider_H_Max_Black->setValue(camera_video.color_threshold[4][1]);
+    ui->horizontalSlider_S_Min_Black->setValue(camera_video.color_threshold[4][2]);
+    ui->horizontalSlider_S_Max_Black->setValue(camera_video.color_threshold[4][3]);
+    ui->horizontalSlider_V_Min_Black->setValue(camera_video.color_threshold[4][4]);
+    ui->horizontalSlider_V_Max_Black->setValue(camera_video.color_threshold[4][5]);
 }
 
 int MainWindow::read_saved_paras()
 {
-    /*char dir_path[80]="/home/cc/catkin_ws/src/break_point";
     QDir *temp = new QDir;
     bool exist = temp->exists(QString(dir_path));
     if(!exist)
@@ -117,36 +164,40 @@ int MainWindow::read_saved_paras()
         return 0;
     }
 
-    QString fileName = "/home/cc/catkin_ws/src/break_point/config.txt";
-    fstream config_f;
-    char *path = fileName.toLatin1().data();
-    config_f.open(path,ios::in);
+    char path1[100];
+    strcpy(path1,dir_path);
+    char name1[17] = "/camera_1.txt";
+    strcat(path1,name1);
+
+    fstream config_f1;
+    config_f1.open(path1,ios::in);
 
     int read_counter=0;
-    while(!config_f.eof())
+    while(!config_f1.eof())
     {   //while not the end of file
         char str[30];
-        config_f >> str;
+        config_f1 >> str;
 
-        float fnum = str[1]-'0'+ (str[3]-'0')/10.0;
-        switch(read_counter)
+        int num = 0;
+        int start_place = 0;
+        for(int i=0;i<30;i++)
         {
-        case 0:
-            take_off_height = fnum;
-            break;
-        case 1:
-            spray_length = fnum;
-            break;
-        case 2:
-            spray_width = fnum;
-            break;
-        default:
-            break;
+            if(str[i]=='#') { start_place = i; break;}
         }
+
+        for(int j=start_place-1, times=1; j>=0; j--)
+        {
+            num += (str[j]-'0') * times;
+            times *= 10;
+        }
+        camera_video.color_threshold[read_counter/6][read_counter%6] = num;
+        //cout<<camera_video.color_threshold[read_counter/6][read_counter%6]<<endl;
+
         read_counter ++;
     }
-        config_f.close(); //reading finished
-        */
+    config_f1.close(); //reading finished
+    cout<<"parameter reading finished!"<<endl;
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -159,7 +210,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
           event->ignore();  //忽略退出信号，程序继续运行
     }
     else if (button == QMessageBox::Yes) {
-          event->accept();  //接受退出信号，程序退出
+        event->accept();  //接受退出信号，程序退出
     }
 }
 
@@ -228,39 +279,67 @@ float MainWindow::point_line_dist(float m, float n, float k, float b)
 
 int MainWindow::on_pushButton_Save_Config_clicked()
 {
-    /*char name[17] = "/config.txt";
-    char path[80]="/home/cc/catkin_ws/src/break_point";
+
+    cout<<"saving...\n";
 
     QDir *temp = new QDir;
-    bool exist = temp->exists(QString(path));
-    if(!exist)temp->mkdir(QString(path));
+    bool exist = temp->exists(QString(dir_path));
+    if(!exist)temp->mkdir(QString(dir_path));
 
-    strcat(path,name);
+    //parameters for camera 1
+    char path1[100];
+    strcpy(path1,dir_path);
+    char name1[17] = "/camera_1.txt";
+    strcat(path1,name1);
 
-    cout<<"file saved in "<<path<<endl;
-    FILE *pTxtFile = NULL;
+    FILE *pTxtFile1 = NULL;
 
-    pTxtFile = fopen(path, "w+");
-    if (pTxtFile == NULL)
+    pTxtFile1 = fopen(path1, "w+");
+    if (pTxtFile1 == NULL)
     {
         printf("The program exist!\n");
         return 0;
     }
 
-    cout<<"saving...\n";
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<6;j++)
+        {
+            fprintf(pTxtFile1,"%d#\n",camera_video.color_threshold[i][j]);
+        }
+    }
 
-    fprintf(pTxtFile,"#%.1f#\n",take_off_height);
-    fprintf(pTxtFile,"#%.1f#\n",spray_length);
-    fprintf(pTxtFile,"#%.1f#\n",spray_width);
+    fclose(pTxtFile1);
 
-    fprintf(pTxtFile,"end");
-    //fprintf(pTxtFile,"take_off_height spray_length spray_width message.extra_function.laser_height_enable message.extra_function.obs_avoid_enable message.pump.pump_speed_sp");
+    /*
+    char path2[100];
+    strcpy(path2,dir_path);
+    char name2[17] = "/camera_2.txt";
+    strcat(path2,name2);
 
-    fclose(pTxtFile);
+    FILE *pTxtFile2 = NULL;
+
+    pTxtFile2 = fopen(path2, "w+");
+    if (pTxtFile2 == NULL)
+    {
+        printf("The program exist!\n");
+        return 0;
+    }
+
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<6;j++)
+        {
+            fprintf(pTxtFile2,"%d#\n",camera2_video.color_threshold[i][j]);
+        }
+    }
+
+    fclose(pTxtFile2);
+    */
 
     QMessageBox message_box(QMessageBox::Warning,"提示","保存成功!", QMessageBox::Ok, NULL);
     message_box.exec();
-    return 1;*/
+    return 1;
 
 }
 
@@ -272,9 +351,16 @@ void MainWindow::camera_Image_Slot()
 
 void MainWindow::on_pushButton_Open_Video_clicked()
 {
-    camera_video.openCamara();
-    ui->pushButton_Open_Video->setEnabled(false);
-    ui->pushButton_Close_Video->setEnabled(true);
+    if(camera_video.openCamara())
+    {
+        ui->pushButton_Open_Video->setEnabled(false);
+        ui->pushButton_Close_Video->setEnabled(true);
+    }
+    else
+    {
+        QMessageBox message_box(QMessageBox::Warning,"警告","未检测到1号摄像头!", QMessageBox::Ok, NULL);
+        message_box.exec();
+    }
 }
 
 
@@ -285,15 +371,22 @@ void MainWindow::on_pushButton_Close_Video_clicked()
     ui->pushButton_Close_Video->setEnabled(false);
 }
 
-void MainWindow::camera2_Image_Slot()
-{
-    ui->label_Camera_2->setPixmap(QPixmap::fromImage(camera2_video.image));//视频
-}
+
 
 void MainWindow::on_pushButton_Open_Video_2_clicked()
 {
-    ui->pushButton_Open_Video_2->setEnabled(false);
-    ui->pushButton_Close_Video_2->setEnabled(true);
+    if(camera2_video.openCamara())
+    {
+        ui->pushButton_Open_Video_2->setEnabled(false);
+        ui->pushButton_Close_Video_2->setEnabled(true);
+    }
+    else
+    {
+        QMessageBox message_box(QMessageBox::Warning,"警告","未检测到2号摄像头!", QMessageBox::Ok, NULL);
+        message_box.exec();
+    }
+
+
 }
 
 
@@ -302,6 +395,11 @@ void MainWindow::on_pushButton_Close_Video_2_clicked()
     camera2_video.closeCamara();
     ui->pushButton_Open_Video_2->setEnabled(true);
     ui->pushButton_Close_Video_2->setEnabled(false);
+}
+
+void MainWindow::camera2_Image_Slot()
+{
+    ui->label_Camera_2->setPixmap(QPixmap::fromImage(camera2_video.image));//视频
 }
 
 void MainWindow::camera_calibration_Image_Slot()
@@ -358,3 +456,67 @@ void MainWindow::on_pushButton_Video_Calibration_Start_clicked()
 
     camera_calibration.calibration();
 }
+
+void MainWindow::on_checkBox_clicked()
+{
+    if(ui->checkBox->isChecked())
+    {
+        on_pushButton_Range_Update_clicked();
+        camera_video.bool_fill_color = true;
+    }
+    else camera_video.bool_fill_color = false;
+}
+
+void MainWindow::on_pushButton_Range_Update_clicked()
+{
+    camera_video.color_threshold[0][0] = ui->horizontalSlider_H_Min_Blue->value();
+    camera_video.color_threshold[0][1] = ui->horizontalSlider_H_Max_Blue->value();
+    camera_video.color_threshold[0][2] = ui->horizontalSlider_S_Min_Blue->value();
+    camera_video.color_threshold[0][3] = ui->horizontalSlider_S_Max_Blue->value();
+    camera_video.color_threshold[0][4] = ui->horizontalSlider_V_Min_Blue->value();
+    camera_video.color_threshold[0][5] = ui->horizontalSlider_V_Max_Blue->value();
+
+    camera_video.color_threshold[1][0] = ui->horizontalSlider_H_Min_Yellow->value();
+    camera_video.color_threshold[1][1] = ui->horizontalSlider_H_Max_Yellow->value();
+    camera_video.color_threshold[1][2] = ui->horizontalSlider_S_Min_Yellow->value();
+    camera_video.color_threshold[1][3] = ui->horizontalSlider_S_Max_Yellow->value();
+    camera_video.color_threshold[1][4] = ui->horizontalSlider_V_Min_Yellow->value();
+    camera_video.color_threshold[1][5] = ui->horizontalSlider_V_Max_Yellow->value();
+
+    camera_video.color_threshold[2][0] = ui->horizontalSlider_H_Min_Red->value();
+    camera_video.color_threshold[2][1] = ui->horizontalSlider_H_Max_Red->value();
+    camera_video.color_threshold[2][2] = ui->horizontalSlider_S_Min_Red->value();
+    camera_video.color_threshold[2][3] = ui->horizontalSlider_S_Max_Red->value();
+    camera_video.color_threshold[2][4] = ui->horizontalSlider_V_Min_Red->value();
+    camera_video.color_threshold[2][5] = ui->horizontalSlider_V_Max_Red->value();
+
+    camera_video.color_threshold[3][0] = ui->horizontalSlider_H_Min_White->value();
+    camera_video.color_threshold[3][1] = ui->horizontalSlider_H_Max_White->value();
+    camera_video.color_threshold[3][2] = ui->horizontalSlider_S_Min_White->value();
+    camera_video.color_threshold[3][3] = ui->horizontalSlider_S_Max_White->value();
+    camera_video.color_threshold[3][4] = ui->horizontalSlider_V_Min_White->value();
+    camera_video.color_threshold[3][5] = ui->horizontalSlider_V_Max_White->value();
+
+    camera_video.color_threshold[4][0] = ui->horizontalSlider_H_Min_Black->value();
+    camera_video.color_threshold[4][1] = ui->horizontalSlider_H_Max_Black->value();
+    camera_video.color_threshold[4][2] = ui->horizontalSlider_S_Min_Black->value();
+    camera_video.color_threshold[4][3] = ui->horizontalSlider_S_Max_Black->value();
+    camera_video.color_threshold[4][4] = ui->horizontalSlider_V_Min_Black->value();
+    camera_video.color_threshold[4][5] = ui->horizontalSlider_V_Max_Black->value();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,8 +42,8 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>10</y>
+      <x>0</x>
+      <y>20</y>
       <width>2271</width>
       <height>971</height>
      </rect>
@@ -72,7 +72,7 @@
       <property name="geometry">
        <rect>
         <x>-10</x>
-        <y>-1</y>
+        <y>-20</y>
         <width>1421</width>
         <height>931</height>
        </rect>
@@ -652,8 +652,8 @@
       <widget class="QTabWidget" name="tabWidget_Camera">
        <property name="geometry">
         <rect>
-         <x>525</x>
-         <y>50</y>
+         <x>530</x>
+         <y>30</y>
          <width>191</width>
          <height>331</height>
         </rect>
@@ -724,15 +724,27 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Blue">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="invertedAppearance">
+               <bool>false</bool>
+              </property>
+              <property name="invertedControls">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Blue">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -748,6 +760,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Blue">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -756,7 +771,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Blue">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -772,6 +790,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Blue">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -780,7 +801,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Blue">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -816,6 +840,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Yellow">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -824,7 +851,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Yellow">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -840,6 +870,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Yellow">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -848,7 +881,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Yellow">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -864,6 +900,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Yellow">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -872,7 +911,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Yellow">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -986,6 +1028,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Red">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -994,7 +1039,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Red">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1010,6 +1058,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Red">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1018,7 +1069,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Red">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1034,6 +1088,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Red">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1042,7 +1099,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Red">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1056,7 +1116,7 @@
        </widget>
        <widget class="QWidget" name="tab_7">
         <attribute name="title">
-         <string>  G  </string>
+         <string> W </string>
         </attribute>
         <widget class="QLabel" name="label_24">
          <property name="geometry">
@@ -1116,16 +1176,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Min_Green">
+             <widget class="QSlider" name="horizontalSlider_H_Min_White">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Max_Green">
+             <widget class="QSlider" name="horizontalSlider_H_Max_White">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1140,16 +1206,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Min_Green">
+             <widget class="QSlider" name="horizontalSlider_S_Min_White">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Max_Green">
+             <widget class="QSlider" name="horizontalSlider_S_Max_White">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1164,16 +1236,171 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Min_Green">
+             <widget class="QSlider" name="horizontalSlider_V_Min_White">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Max_Green">
+             <widget class="QSlider" name="horizontalSlider_V_Max_White">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_20">
+        <attribute name="title">
+         <string> BK</string>
+        </attribute>
+        <widget class="QLabel" name="label_64">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>H</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_65">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>230</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>V</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_66">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>140</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget_24">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>30</y>
+           <width>141</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_75">
+          <property name="spacing">
+           <number>25</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_76">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Min_Black">
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Max_Black">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_77">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Min_Black">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Max_Black">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_78">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Min_Black">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Max_Black">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1186,11 +1413,63 @@
         </widget>
        </widget>
       </widget>
+      <widget class="QPushButton" name="pushButton_Range_Update">
+       <property name="geometry">
+        <rect>
+         <x>560</x>
+         <y>370</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>阈值更新</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_Range_Update_2">
+       <property name="geometry">
+        <rect>
+         <x>1260</x>
+         <y>370</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>阈值更新</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_Range_Update_3">
+       <property name="geometry">
+        <rect>
+         <x>560</x>
+         <y>830</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>阈值更新</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_Range_Update_4">
+       <property name="geometry">
+        <rect>
+         <x>1260</x>
+         <y>830</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>阈值更新</string>
+       </property>
+      </widget>
       <widget class="QTabWidget" name="tabWidget_Camera_2">
        <property name="geometry">
         <rect>
-         <x>1214</x>
-         <y>50</y>
+         <x>1220</x>
+         <y>30</y>
          <width>191</width>
          <height>331</height>
         </rect>
@@ -1261,6 +1540,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Blue_2">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1269,7 +1551,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Blue_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1285,6 +1570,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Blue_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1293,7 +1581,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Blue_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1309,6 +1600,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Blue_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1317,7 +1611,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Blue_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1353,6 +1650,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Yellow_2">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1361,7 +1661,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Yellow_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1377,6 +1680,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Yellow_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1385,7 +1691,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Yellow_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1401,6 +1710,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Yellow_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1409,7 +1721,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Yellow_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1523,6 +1838,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Red_2">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1531,7 +1849,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Red_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1547,6 +1868,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Red_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1555,7 +1879,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Red_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1571,6 +1898,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Red_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1579,7 +1909,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Red_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1593,7 +1926,7 @@
        </widget>
        <widget class="QWidget" name="tab_11">
         <attribute name="title">
-         <string>  G  </string>
+         <string> W </string>
         </attribute>
         <widget class="QLabel" name="label_33">
          <property name="geometry">
@@ -1653,16 +1986,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Min_Green_2">
+             <widget class="QSlider" name="horizontalSlider_H_Min_White_2">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Max_Green_2">
+             <widget class="QSlider" name="horizontalSlider_H_Max_White_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1677,16 +2016,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Min_Green_2">
+             <widget class="QSlider" name="horizontalSlider_S_Min_White_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Max_Green_2">
+             <widget class="QSlider" name="horizontalSlider_S_Max_White_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1701,16 +2046,171 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Min_Green_2">
+             <widget class="QSlider" name="horizontalSlider_V_Min_White_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Max_Green_2">
+             <widget class="QSlider" name="horizontalSlider_V_Max_White_2">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_21">
+        <attribute name="title">
+         <string> BK</string>
+        </attribute>
+        <widget class="QLabel" name="label_67">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>H</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_68">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>230</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>V</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_69">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>140</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget_25">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>30</y>
+           <width>141</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_79">
+          <property name="spacing">
+           <number>25</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_80">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Min_Black_2">
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Max_Black_2">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_81">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Min_Black_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Max_Black_2">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_82">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Min_Black_2">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Max_Black_2">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1726,8 +2226,8 @@
       <widget class="QTabWidget" name="tabWidget_Camera_3">
        <property name="geometry">
         <rect>
-         <x>525</x>
-         <y>510</y>
+         <x>530</x>
+         <y>490</y>
          <width>191</width>
          <height>331</height>
         </rect>
@@ -1798,6 +2298,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Blue_3">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1806,7 +2309,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Blue_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1822,6 +2328,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Blue_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1830,7 +2339,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Blue_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1846,6 +2358,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Blue_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1854,7 +2369,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Blue_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1890,6 +2408,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Yellow_3">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1898,7 +2419,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Yellow_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1914,6 +2438,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Yellow_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1922,7 +2449,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Yellow_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1938,6 +2468,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Yellow_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1946,7 +2479,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Yellow_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2060,6 +2596,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Red_3">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2068,7 +2607,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Red_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2084,6 +2626,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Red_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2092,7 +2637,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Red_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2108,6 +2656,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Red_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2116,7 +2667,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Red_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2130,7 +2684,7 @@
        </widget>
        <widget class="QWidget" name="tab_15">
         <attribute name="title">
-         <string>  G  </string>
+         <string> W </string>
         </attribute>
         <widget class="QLabel" name="label_47">
          <property name="geometry">
@@ -2190,16 +2744,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Min_Green_3">
+             <widget class="QSlider" name="horizontalSlider_H_Min_White_3">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Max_Green_3">
+             <widget class="QSlider" name="horizontalSlider_H_Max_White_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2214,16 +2774,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Min_Green_3">
+             <widget class="QSlider" name="horizontalSlider_S_Min_White_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Max_Green_3">
+             <widget class="QSlider" name="horizontalSlider_S_Max_White_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2238,16 +2804,171 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Min_Green_3">
+             <widget class="QSlider" name="horizontalSlider_V_Min_White_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Max_Green_3">
+             <widget class="QSlider" name="horizontalSlider_V_Max_White_3">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_22">
+        <attribute name="title">
+         <string> BK</string>
+        </attribute>
+        <widget class="QLabel" name="label_70">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>H</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_71">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>230</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>V</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_72">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>140</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget_26">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>30</y>
+           <width>141</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_83">
+          <property name="spacing">
+           <number>25</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_84">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Min_Black_3">
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Max_Black_3">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_85">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Min_Black_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Max_Black_3">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_86">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Min_Black_3">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Max_Black_3">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2263,8 +2984,8 @@
       <widget class="QTabWidget" name="tabWidget_Camera_4">
        <property name="geometry">
         <rect>
-         <x>1215</x>
-         <y>509</y>
+         <x>1220</x>
+         <y>490</y>
          <width>191</width>
          <height>331</height>
         </rect>
@@ -2335,6 +3056,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Blue_4">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2343,7 +3067,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Blue_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2359,6 +3086,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Blue_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2367,7 +3097,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Blue_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2383,6 +3116,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Blue_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2391,7 +3127,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Blue_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2427,6 +3166,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Yellow_4">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2435,7 +3177,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Yellow_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2451,6 +3196,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Yellow_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2459,7 +3207,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Yellow_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2475,6 +3226,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Yellow_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2483,7 +3237,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Yellow_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2597,6 +3354,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Min_Red_4">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2605,7 +3365,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_H_Max_Red_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2621,6 +3384,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Min_Red_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2629,7 +3395,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_S_Max_Red_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2645,6 +3414,9 @@
             </property>
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Min_Red_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2653,7 +3425,10 @@
             <item>
              <widget class="QSlider" name="horizontalSlider_V_Max_Red_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2667,7 +3442,7 @@
        </widget>
        <widget class="QWidget" name="tab_19">
         <attribute name="title">
-         <string>  G  </string>
+         <string> W </string>
         </attribute>
         <widget class="QLabel" name="label_59">
          <property name="geometry">
@@ -2727,16 +3502,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Min_Green_4">
+             <widget class="QSlider" name="horizontalSlider_H_Min_White_4">
+              <property name="maximum">
+               <number>180</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_H_Max_Green_4">
+             <widget class="QSlider" name="horizontalSlider_H_Max_White_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2751,16 +3532,22 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Min_Green_4">
+             <widget class="QSlider" name="horizontalSlider_S_Min_White_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_S_Max_Green_4">
+             <widget class="QSlider" name="horizontalSlider_S_Max_White_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2775,16 +3562,171 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Min_Green_4">
+             <widget class="QSlider" name="horizontalSlider_V_Min_White_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSlider" name="horizontalSlider_V_Max_Green_4">
+             <widget class="QSlider" name="horizontalSlider_V_Max_White_4">
               <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_23">
+        <attribute name="title">
+         <string> BK</string>
+        </attribute>
+        <widget class="QLabel" name="label_73">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>H</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_74">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>230</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>V</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_75">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>140</y>
+           <width>21</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>S</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget_27">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>30</y>
+           <width>141</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_87">
+          <property name="spacing">
+           <number>25</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_88">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Min_Black_4">
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_H_Max_Black_4">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_89">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Min_Black_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_S_Max_Black_4">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_90">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Min_Black_4">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="horizontalSlider_V_Max_Black_4">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2797,56 +3739,6 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>1210</x>
-         <y>880</y>
-         <width>208</width>
-         <height>42</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QPushButton" name="pushButton_Save_Config">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>保存</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_Restore_Config_">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>参数同化</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <zorder>layoutWidget</zorder>
       <zorder>label_Camera</zorder>
       <zorder>layoutWidget_6</zorder>
@@ -2855,8 +3747,11 @@
       <zorder>label_Camera_3</zorder>
       <zorder>layoutWidget_8</zorder>
       <zorder>label_Camera_4</zorder>
-      <zorder>layoutWidget</zorder>
       <zorder>tabWidget_Camera</zorder>
+      <zorder>pushButton_Range_Update</zorder>
+      <zorder>pushButton_Range_Update_2</zorder>
+      <zorder>pushButton_Range_Update_3</zorder>
+      <zorder>pushButton_Range_Update_4</zorder>
       <zorder>tabWidget_Camera_2</zorder>
       <zorder>tabWidget_Camera_3</zorder>
       <zorder>tabWidget_Camera_4</zorder>
@@ -2864,8 +3759,8 @@
      <widget class="QTabWidget" name="tabWidget_PaintArea">
       <property name="geometry">
        <rect>
-        <x>1446</x>
-        <y>20</y>
+        <x>1450</x>
+        <y>80</y>
         <width>360</width>
         <height>240</height>
        </rect>
@@ -2883,7 +3778,7 @@
        </size>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::RightToLeft</enum>
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -2895,9 +3790,9 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>0</y>
-          <width>71</width>
+          <x>245</x>
+          <y>20</y>
+          <width>101</width>
           <height>120</height>
          </rect>
         </property>
@@ -2939,8 +3834,8 @@
        <widget class="QWidget" name="layoutWidget_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>120</y>
+          <x>30</x>
+          <y>150</y>
           <width>84</width>
           <height>52</height>
          </rect>
@@ -2965,8 +3860,8 @@
        <widget class="QWidget" name="layoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>120</y>
+          <x>250</x>
+          <y>150</y>
           <width>81</width>
           <height>52</height>
          </rect>
@@ -2991,10 +3886,10 @@
        <widget class="QWidget" name="layoutWidget_4">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>0</y>
-          <width>82</width>
-          <height>118</height>
+          <x>135</x>
+          <y>20</y>
+          <width>101</width>
+          <height>121</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -3031,8 +3926,8 @@
        <widget class="QWidget" name="layoutWidget_5">
         <property name="geometry">
          <rect>
-          <x>100</x>
-          <y>0</y>
+          <x>9</x>
+          <y>15</y>
           <width>121</width>
           <height>126</height>
          </rect>
@@ -3103,9 +3998,9 @@
        </widget>
        <zorder>layoutWidget_3</zorder>
        <zorder>layoutWidget_4</zorder>
-       <zorder>layoutWidget_5</zorder>
        <zorder>layoutWidget</zorder>
        <zorder>layoutWidget_2</zorder>
+       <zorder>layoutWidget_5</zorder>
       </widget>
      </widget>
      <widget class="QFrame" name="frame_Fly_Position">
@@ -3139,8 +4034,8 @@
      <widget class="QLabel" name="label_Camera_5">
       <property name="geometry">
        <rect>
-        <x>1447</x>
-        <y>300</y>
+        <x>1450</x>
+        <y>340</y>
         <width>360</width>
         <height>270</height>
        </rect>
@@ -3179,6 +4074,56 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>1510</x>
+        <y>9</y>
+        <width>208</width>
+        <height>42</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushButton_Save_Config">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_Restore_Config_">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>参数同化</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -3187,22 +4132,22 @@
      <widget class="QLabel" name="label_Camera_Calibration">
       <property name="geometry">
        <rect>
-        <x>110</x>
-        <y>40</y>
-        <width>1280</width>
-        <height>720</height>
+        <x>150</x>
+        <y>180</y>
+        <width>720</width>
+        <height>540</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>1280</width>
-        <height>720</height>
+        <width>720</width>
+        <height>540</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>1280</width>
-        <height>720</height>
+        <width>720</width>
+        <height>540</height>
        </size>
       </property>
       <property name="mouseTracking">
@@ -3230,8 +4175,8 @@
      <widget class="QTextBrowser" name="textBrowser_Calibratiob">
       <property name="geometry">
        <rect>
-        <x>1460</x>
-        <y>430</y>
+        <x>990</x>
+        <y>480</y>
         <width>321</width>
         <height>291</height>
        </rect>
@@ -3240,8 +4185,8 @@
      <widget class="QLabel" name="label_62">
       <property name="geometry">
        <rect>
-        <x>1500</x>
-        <y>50</y>
+        <x>990</x>
+        <y>160</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -3253,8 +4198,8 @@
      <widget class="QLabel" name="label_63">
       <property name="geometry">
        <rect>
-        <x>1680</x>
-        <y>50</y>
+        <x>1170</x>
+        <y>160</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -3263,12 +4208,12 @@
        <string>棋盘格数</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>1460</x>
-        <y>80</y>
-        <width>351</width>
+        <x>950</x>
+        <y>190</y>
+        <width>433</width>
         <height>271</height>
        </rect>
       </property>
@@ -3701,6 +4646,19 @@
      <bool>true</bool>
     </property>
    </widget>
+   <zorder>label_connect</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>label_39</zorder>
+   <zorder>label_Controller</zorder>
+   <zorder>label_41</zorder>
+   <zorder>label_Computer</zorder>
+   <zorder>label_Warning_Area</zorder>
+   <zorder>progressBar_GPS</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>progressBar_Battery</zorder>
+   <zorder>label_System_Time</zorder>
+   <zorder>label_23</zorder>
+   <zorder>layoutWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

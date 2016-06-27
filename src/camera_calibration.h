@@ -1,7 +1,6 @@
 #ifndef CAMERA_CALIBRATION_H
 #define CAMERA_CALIBRATION_H
 
-#include <QThread>
 #include <QWidget>
 #include <QImage>
 #include <QTimer>
@@ -15,18 +14,20 @@
 
 
 //显示图幅
-#define calibration_image_area_width 1280
-#define calibration_image_area_height 720
+#define calibration_image_area_width 720
+#define calibration_image_area_height 540
+
+#define raw_image_area_width_c 720
+#define raw_image_area_height_c 540
 
 using namespace std;
 
-class Camera_Calibration:public QThread
+class Camera_Calibration:public QObject
 {
     Q_OBJECT
 public:
     Camera_Calibration();
     ~Camera_Calibration();
-    void run();
 
     QImage image;
     QImage image_temp[100];
@@ -57,12 +58,10 @@ private:
     CvMat * distortion;
     IplImage * mapx;
     IplImage * mapy;
+    char save_path[100];
 
     CvSize board_size;
 
-
-    void camera_Send_Image()const {emit camera_Image_Signal();}
-    void camera_Save_Image()const {emit image_Save_Signal();}
 
     CvScalar yellow;
     int line_thickness;
@@ -70,6 +69,10 @@ private:
 
     bool bool_image_capture;
     bool bool_calibration_done;
+
+
+    void camera_Send_Image()const {emit camera_Image_Signal();}
+    void camera_Save_Image()const {emit image_Save_Signal();}
 
 
 signals:

@@ -3,7 +3,6 @@
 #ifndef CAMERA2_H
 #define CAMERA2_H
 
-#include <QThread>
 #include <QWidget>
 #include <QImage>
 #include <QTimer>
@@ -20,10 +19,13 @@
 #define image_area_width 480
 #define image_area_height 360
 
+#define raw_image_area_width_2 720
+#define raw_image_area_height_2 540
+
 
 using namespace std;
 
-class Camera2:public QThread
+class Camera2:public QObject
 {
     Q_OBJECT
 public:
@@ -38,7 +40,7 @@ public:
     unsigned int image_counter;
 
 public slots:
-    void openCamara();      // 打开摄像头
+    bool openCamara();      // 打开摄像头
     void readFarme();       // 读取当前帧信息
     void closeCamara();     // 关闭摄像头。
 

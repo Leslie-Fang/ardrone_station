@@ -114,6 +114,10 @@ private slots:
 
     void on_pushButton_Video_Calibration_Start_clicked();
 
+    void on_checkBox_clicked();
+
+    void on_pushButton_Range_Update_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;

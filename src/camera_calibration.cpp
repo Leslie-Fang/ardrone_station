@@ -13,6 +13,11 @@ Camera_Calibration::Camera_Calibration()
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(readFarme()));
 
+    sprintf(save_path,"/home/chg/catkin_ws/src/ardrone_station/parameters");
+
+    QDir *temp = new QDir;
+    bool exist = temp->exists(QString(save_path));
+    if(!exist)temp->mkdir(QString(save_path));
 
     bool_show_Image=true;
     bool_image_capture = false;
@@ -35,11 +40,6 @@ Camera_Calibration::~Camera_Calibration()
     delete timer;
 }
 
-void Camera_Calibration::run()
-{
-    //openCamara();
-    //readFarme();
-}
 
 bool Camera_Calibration::openCamara()
 {
@@ -53,8 +53,8 @@ bool Camera_Calibration::openCamara()
     {
         //设定捕获图像大小及帧率
         cvSetCaptureProperty(cam,CV_CAP_PROP_FPS,30);
-        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,1280);
-        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,720);
+        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,raw_image_area_width_c);
+        cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,raw_image_area_height_c);
 
         timer->start(33);              // 开始计时，超时则发出timeout()信号，30帧/s
         bool_open_camera=true;
@@ -163,8 +163,7 @@ void Camera_Calibration::calibration()
             IplImage * gray_image= cvCreateImage(cvGetSize(show),8,1);
             cvCvtColor(show,gray_image,CV_BGR2GRAY);
             cout<<"获取源图像灰度图过程完成...\n";
-            cvFindCornerSubPix(gray_image,image_points_buf,count,cvSize(11,11),cvSize(-1,-1),
-                cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,0.1));
+            cvFindCornerSubPix(gray_image,image_points_buf,count,cvSize(11,11),cvSize(-1,-1),cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,0.1));
             cout<<"灰度图亚像素化过程完成...\n";
             cvDrawChessboardCorners(show,board_size,image_points_buf,count,found);
             cout<<"在源图像上绘制角点过程完成...\n\n";
@@ -245,11 +244,30 @@ void Camera_Calibration::calibration()
         <<"    "<<CV_MAT_ELEM(*distortion_coeffs,float,4,0)
         <<"\n\n";
 
-    cvSave("/home/chg/catkin_ws/src/ardrone_station/parameters/Intrinsics.xml",intrinsic_matrix);
-    cvSave("/home/chg/catkin_ws/src/ardrone_station/parameters/Distortion.xml",distortion_coeffs);
+    char intrinsic_save_number[20];
+    sprintf(intrinsic_save_number,"/%d_Intrinsic", camera_seq);
+    char intrinsic_format[5] = ".xml";
 
-    intrinsic=(CvMat *)cvLoad("/home/chg/catkin_ws/src/ardrone_station/parameters/Intrinsics.xml");
-    distortion=(CvMat *)cvLoad("/home/chg/catkin_ws/src/ardrone_station/parameters/Distortion.xml");
+    char intrinsic_save_name[150];
+    strcpy(intrinsic_save_name,save_path);
+    strcat(intrinsic_save_name,intrinsic_save_number);
+    strcat(intrinsic_save_name,intrinsic_format);
+
+    char distortion_save_number[20];
+    sprintf(distortion_save_number,"/%d_Distortion", camera_seq);
+    char distortion_format[5] = ".xml";
+
+    char distortion_save_name[150];
+    strcpy(distortion_save_name,save_path);
+    strcat(distortion_save_name,distortion_save_number);
+    strcat(distortion_save_name,distortion_format);
+
+
+    cvSave(intrinsic_save_name,intrinsic_matrix);
+    cvSave(distortion_save_name,distortion_coeffs);
+
+    intrinsic=(CvMat *)cvLoad(intrinsic_save_name);
+    distortion=(CvMat *)cvLoad(distortion_save_name);
 
     mapx=cvCreateImage(cvGetSize(frame_raw),IPL_DEPTH_32F,1);
     mapy=cvCreateImage(cvGetSize(frame_raw),IPL_DEPTH_32F,1);
