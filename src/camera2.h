@@ -16,11 +16,9 @@
 
 
 //显示图幅
-#define image_area_width_2 480
-#define image_area_height_2 360
 
-#define raw_image_area_width_2 720
-#define raw_image_area_height_2 540
+#define raw_image_area_width_2 640
+#define raw_image_area_height_2 480
 
 #define CV_RED_2 cvScalar(0,0,255,0)
 #define CV_GREEN_2 cvScalar(0,255,0,0)

@@ -130,6 +130,10 @@ private slots:
 
     void on_radioButton_right_1_clicked();
 
+    void on_horizontalSlider_Height_Threshold_sliderMoved(int position);
+
+    void on_pushButton_Auto_Position_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;

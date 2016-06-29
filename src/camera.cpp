@@ -68,10 +68,14 @@ Camera::~Camera()
 
 void Camera::init_paras()
 {
-    if_read = false;
+
+    capture = false;
 
     //camera_left_side = false;
     camera_enemy_side = true;
+    position_clibration_done = false;
+
+    height_threshold = 0;
 
     neg_d = 20;
     pos_d = 20;
@@ -96,7 +100,7 @@ void Camera::init_paras()
 
 bool Camera::openCamara()
 {
-    cam = cvCreateCameraCapture(0);//打开摄像头，从摄像头中获取视频
+    cam = cvCreateCameraCapture(camera_number);//打开摄像头，从摄像头中获取视频
 
     if(cam == 0)
     {
@@ -110,7 +114,7 @@ bool Camera::openCamara()
         cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_WIDTH,raw_image_area_width);
         cvSetCaptureProperty(cam,CV_CAP_PROP_FRAME_HEIGHT,raw_image_area_height);
 
-        timer->start(100);              // 开始计时，超时则发出timeout()信号，10帧/s
+        timer->start(33);              // 开始计时，超时则发出timeout()信号，30帧/s
         bool_open_camera=true;
 
         return true;
@@ -121,7 +125,6 @@ bool Camera::openCamara()
 
 int Camera::readFarme()
 {
-    cout<<"running*************\n";
     //cvNamedWindow("video",1);
     IplImage* frame_raw = cvQueryFrame(cam);// 从摄像头中抓取并返回每一帧
 
@@ -139,6 +142,365 @@ int Camera::readFarme()
 
         cvRemap(frame_raw,frame_raw,mapx,mapy);
     }
+
+    CvScalar s_raw;
+
+    for(int i = 0;i < frame_raw->height;i++)
+    {
+        for(int j = 0;j < frame_raw->width;j++)
+        {
+            s_raw = cvGet2D(frame_raw,i,j); // get the (i,j) pixel value
+            if(i < (float)height_threshold/100.f*raw_image_area_height)
+            {
+                s_raw.val[0] = 169;
+                s_raw.val[1] = 169;
+                s_raw.val[2] = 169;
+                cvSet2D(frame_raw,i,j,s_raw);//set the (i,j) pixel value
+            }
+
+        }
+    }
+
+
+    //创建灰色图像
+    IplImage* fill_color = cvCreateImage(cvGetSize(frame_raw), 8, 3);
+    CvScalar s;
+
+    for(int i = 0;i < fill_color->height;i++)
+    {
+        for(int j = 0;j < fill_color->width;j++)
+        {
+            s = cvGet2D(fill_color,i,j); // get the (i,j) pixel value
+            s.val[0]=169;
+            s.val[1]=169;
+            s.val[2]=169;
+            cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+        }
+    }
+
+    //hsv空间下分离
+    IplImage* hsv = cvCreateImage(cvGetSize(frame_raw), 8, 3);
+    cvCvtColor(frame_raw, hsv, CV_BGR2HSV);
+
+    if(bool_fill_color)
+    {
+        //Blue
+        CvScalar s_blue;
+
+        for(int i = 0;i < fill_color->height;i++)
+        {
+            for(int j = 0;j < fill_color->width;j++)
+            {
+                s_blue = cvGet2D(hsv,i,j); // get the (i,j) pixel value
+                if(s_blue.val[0] >= color_threshold[0][0] && s_blue.val[0] <= color_threshold[0][1] &&
+                        s_blue.val[1] >= color_threshold[0][2] && s_blue.val[1] <= color_threshold[0][3] &&
+                        s_blue.val[2] >= color_threshold[0][4] && s_blue.val[2] <= color_threshold[0][5])
+                {
+                    s.val[0] = 255;
+                    s.val[1] = 144;
+                    s.val[2] = 30;
+                    cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+                }
+
+            }
+        }
+
+        //Yellow
+        CvScalar s_yellow;
+
+        for(int i = 0;i < fill_color->height;i++)
+        {
+            for(int j = 0;j < fill_color->width;j++)
+            {
+                s_yellow = cvGet2D(hsv,i,j); // get the (i,j) pixel value
+                if(s_yellow.val[0] >= color_threshold[1][0] && s_yellow.val[0] <= color_threshold[1][1] &&
+                        s_yellow.val[1] >= color_threshold[1][2] && s_yellow.val[1] <= color_threshold[1][3] &&
+                        s_yellow.val[2] >= color_threshold[1][4] && s_yellow.val[2] <= color_threshold[1][5])
+                {
+                    s.val[0] = 86;
+                    s.val[1] = 255;
+                    s.val[2] = 255;
+                    cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+                }
+
+            }
+        }
+    }
+
+    //Red
+    CvScalar s_red;
+
+    for(int i = 0;i < fill_color->height;i++)
+    {
+        for(int j = 0;j < fill_color->width;j++)
+        {
+            s_red = cvGet2D(hsv,i,j); // get the (i,j) pixel value
+            if(s_red.val[0] >= color_threshold[2][0] && s_red.val[0] <= color_threshold[2][1] &&
+                    s_red.val[1] >= color_threshold[2][2] && s_red.val[1] <= color_threshold[2][3] &&
+                    s_red.val[2] >= color_threshold[2][4] && s_red.val[2] <= color_threshold[2][5])
+            {
+                s.val[0] = 0;
+                s.val[1] = 0;
+                s.val[2] = 255;
+                cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+            }
+
+        }
+    }
+
+    //White
+    /*CvScalar s_white;
+
+    for(int i = 0;i < fill_color->height;i++)
+    {
+        for(int j = 0;j < fill_color->width;j++)
+        {
+            s_white = cvGet2D(hsv,i,j); // get the (i,j) pixel value
+            if(s_white.val[0] >= color_threshold[3][0] && s_white.val[0] <= color_threshold[3][1] &&
+                    s_white.val[1] >= color_threshold[3][2] && s_white.val[1] <= color_threshold[3][3] &&
+                    s_white.val[2] >= color_threshold[3][4] && s_white.val[2] <= color_threshold[3][5])
+            {
+                s.val[0] = 255;
+                s.val[1] = 255;
+                s.val[2] = 255;
+                cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+            }
+
+        }
+    }
+
+    //Black
+    CvScalar s_black;
+
+    for(int i = 0;i < fill_color->height;i++)
+    {
+        for(int j = 0;j < fill_color->width;j++)
+        {
+            s_black = cvGet2D(hsv,i,j); // get the (i,j) pixel value
+            if(s_black.val[0] >= color_threshold[4][0] && s_black.val[0] <= color_threshold[4][1] &&
+                    s_black.val[1] >= color_threshold[4][2] && s_black.val[1] <= color_threshold[4][3] &&
+                    s_black.val[2] >= color_threshold[4][4] && s_black.val[2] <= color_threshold[4][5])
+            {
+                s.val[0] = 0;
+                s.val[1] = 0;
+                s.val[2] = 0;
+                cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
+            }
+
+        }
+    }*/
+
+    /***Find robot***/
+    if(position_clibration_done)
+    {
+
+        CvScalar s_red_black;
+        IplImage* red = cvCreateImage(cvGetSize(fill_color), 8, 1);
+
+        for(int i = 0;i < red->height;i++)
+        {
+            for(int j = 0;j < red->width;j++)
+            {
+                s_red_black = cvGet2D(fill_color,i,j); // get the (i,j) pixel value
+                if(s_red_black.val[0] == 0 && s_red_black.val[1] == 0 && s_red_black.val[2] == 255)
+                {
+                    cvSet2D(red,i,j,CV_WHITE);//set the (i,j) pixel value
+                }
+                else
+                {
+                    cvSet2D(red,i,j,CV_BLACK);//set the (i,j) pixel value
+                }
+            }
+        }
+
+
+        cvErode( red, red, NULL, 1);
+        cvDilate( red, red, NULL, 1);
+
+        CvPoint2D32f robot_center;
+        float radius;
+
+        CvMemStorage* red_storage = cvCreateMemStorage(0);
+        CvSeq* red_contours = 0;
+        int contour_num = cvFindContours(red, red_storage, &red_contours, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+        cout<<"contour_num="<<contour_num<<endl;
+        if(contour_num > 0)
+        {
+            cvDrawContours(fill_color, red_contours, CV_GREEN, CV_GREEN, 50);
+
+            CvSeq *c = 0;
+            bool found = false;
+            int counter = 0;
+            robot_image_p[0] = 0.f;
+            robot_image_p[1] = 0.f;
+            for (c = red_contours;c !=NULL;c = c->h_next)
+            {
+                double area = fabs(cvContourArea(c,CV_WHOLE_SEQ));
+                if(area > 200)
+                {
+                    cvMinEnclosingCircle(c,&robot_center,&radius);
+                    cvCircle(fill_color,cvPointFrom32f(robot_center),4,CV_GREEN,4);
+                    robot_image_p[0] += robot_center.x;
+                    robot_image_p[1] += raw_image_area_height - robot_center.y;
+                    found = true;
+                    counter ++;
+                }
+
+            }
+            if(!found)
+            {
+                robot_image_p[0] = 0.f;
+                robot_image_p[1] = 0.f;
+            }
+            else
+            {
+                robot_image_p[0] = robot_image_p[0] / counter;
+                robot_image_p[1] = robot_image_p[1] / counter;
+            }
+        }
+        else
+        {
+            robot_image_p[0] = 0.f;
+            robot_image_p[1] = 0.f;
+        }
+
+        cvReleaseMemStorage(&red_storage);
+        cvReleaseImage(&red);
+
+
+        /***Calculate real position ***/
+        if(robot_image_p[0] > 0.001) //image_position
+        {
+            //rank crosspoints by distance to robot, from small to large
+            float distance_temp[5][5];
+            for(int i = 0; i < 5; i++)
+            {
+                for(int j = 0; j < 5; j++)
+                {
+                    distance_temp[i][j] = point_distance_f(robot_image_p[0], robot_image_p[1], cross_points_position_enemy[i][j][0], cross_points_position_enemy[i][j][1]);
+                }
+            }
+            //nearest point
+            float min_distance = 10000.f;
+            int min_row, min_col;
+            for(int i = 0; i < 5; i++)
+            {
+                for(int j = 0; j < 5; j++)
+                {
+                    if(distance_temp[i][j] < min_distance)
+                    {
+                        min_distance = distance_temp[i][j];
+                        min_row = i;
+                        min_col = j;
+                    }
+                }
+            }
+            //second nearest point with different row and col
+            float min_distance_2 = 10000.f;
+            int min_row_2, min_col_2;
+            for(int i = 0; i < 5; i++)
+            {
+                for(int j = 0; j < 5; j++)
+                {
+                    if(distance_temp[i][j] < min_distance_2 && distance_temp[i][j] > min_distance && i!= min_row && j!=min_col)
+                    {
+                        min_distance_2 = distance_temp[i][j];
+                        min_row_2 = i;
+                        min_col_2 = j;
+                    }
+                }
+            }
+
+
+            if(!camera_left_side)
+            {
+                //when right side
+                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy[min_row][min_col][0], cross_points_position_enemy[min_row][min_col][1]);
+                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy[min_row_2][min_col_2][0], cross_points_position_enemy[min_row_2][min_col_2][1]);
+                CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, robot_image_p[0], robot_image_p[1]);
+
+                float kx = (cross_points_real_position_right_enemy[min_row][min_col][0] - cross_points_real_position_right_enemy[min_row_2][min_col_2][0]) / (min_dist_p1_tr.x - min_dist_p2_tr.x);
+                float ky = (cross_points_real_position_right_enemy[min_row][min_col][1] - cross_points_real_position_right_enemy[min_row_2][min_col_2][1]) / (min_dist_p1_tr.y - min_dist_p2_tr.y);
+
+                robot_real_p[0] = (cross_points_real_position_right_enemy[min_row][min_col][0] + kx*(robot_image_p_tr.x - min_dist_p1_tr.x) + cross_points_real_position_right_enemy[min_row_2][min_col_2][0] + kx*(robot_image_p_tr.x - min_dist_p2_tr.x))/2.f;
+                robot_real_p[1] = (cross_points_real_position_right_enemy[min_row][min_col][1] + ky*(robot_image_p_tr.y - min_dist_p1_tr.y) + cross_points_real_position_right_enemy[min_row_2][min_col_2][1] + ky*(robot_image_p_tr.y - min_dist_p2_tr.y))/2.f;
+            }
+            else
+            {
+                //when left side
+                cout<<"negative_k_average "<<negative_k_average<<"positive_k_average"<<positive_k_average<<"cross_points_position_enemy"<<cross_points_position_enemy[min_row][min_col][0]<<" , "<<cross_points_position_enemy[min_row][min_col][1]<<endl;
+                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy[min_row][min_col][0], cross_points_position_enemy[min_row][min_col][1]);
+                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy[min_row_2][min_col_2][0], cross_points_position_enemy[min_row_2][min_col_2][1]);
+                CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, robot_image_p[0], robot_image_p[1]);
+
+                cout<<"px = "<<min_dist_p1_tr.x<<" , py = "<<min_dist_p1_tr.y<<endl;
+                cout<<"rx = "<<robot_image_p_tr.x<<" , ry = "<<robot_image_p_tr.y<<endl;
+
+                float kx = (cross_points_real_position_left_enemy[min_row][min_col][0] - cross_points_real_position_left_enemy[min_row_2][min_col_2][0]) / (min_dist_p1_tr.x - min_dist_p2_tr.x);
+                float ky = (cross_points_real_position_left_enemy[min_row][min_col][1] - cross_points_real_position_left_enemy[min_row_2][min_col_2][1]) / (min_dist_p1_tr.y - min_dist_p2_tr.y);
+                cout<<"kx = "<<kx<<" , ky = "<<ky<<endl;
+
+                robot_real_p[0] = (cross_points_real_position_left_enemy[min_row][min_col][0] + kx*(robot_image_p_tr.x - min_dist_p1_tr.x) + cross_points_real_position_left_enemy[min_row_2][min_col_2][0] + kx*(robot_image_p_tr.x - min_dist_p2_tr.x))/2.f;
+                robot_real_p[1] = (cross_points_real_position_left_enemy[min_row][min_col][1] + ky*(robot_image_p_tr.y - min_dist_p1_tr.y) + cross_points_real_position_left_enemy[min_row_2][min_col_2][1] + ky*(robot_image_p_tr.y - min_dist_p2_tr.y))/2.f;
+            }
+
+            //position offset
+
+
+            //cout<<"Point1 Position = ("<<cross_points_real_position_right_enemy[min_row][min_col][0]<<","<<cross_points_real_position_right_enemy[min_row][min_col][1]<<")\n";
+            //cout<<"Point2 Position = ("<<cross_points_real_position_right_enemy[min_row_2][min_col_2][0]<<","<<cross_points_real_position_right_enemy[min_row_2][min_col_2][1]<<")\n";
+            cout<<"Robot image Position = ("<<robot_image_p[0]<<","<<robot_image_p[1]<<")\n";
+            cout<<"Robot Real Position = ("<<robot_real_p[0]<<","<<robot_real_p[1]<<")\n";
+            cvCircle(fill_color, cvPoint(cross_points_position_enemy[min_row][min_col][0], raw_image_area_height - cross_points_position_enemy[min_row][min_col][1]), 4, CV_GREEN, 6);
+            cvCircle(fill_color, cvPoint(cross_points_position_enemy[min_row_2][min_col_2][0], raw_image_area_height - cross_points_position_enemy[min_row_2][min_col_2][1]), 4, CV_GREEN, 6);
+            cvCircle(fill_color, cvPoint((int)robot_image_p[0], raw_image_area_height - (int)robot_image_p[1]), 10, CV_RED, 2);
+        }
+        else
+        {
+            cout<<"Can not find robot!!"<<endl;
+            robot_real_p[0] = -1000.f;
+            robot_real_p[1] = -1000.f;
+        }
+
+    }
+
+    /***Lines Process***/
+    if(capture)
+    {
+        cvSaveImage("/home/chg/catkin_ws/src/1.jpg",frame_raw);
+        capture = false;
+        auto_position();
+    }
+
+    /***Display**/
+    if(!bool_fill_color)
+    {
+         // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
+        image = QImage((const uchar*)frame_raw->imageData, frame_raw->width, frame_raw->height,QImage::Format_RGB888).rgbSwapped();
+
+        if(bool_show_Image)camera_Send_Image();
+    }
+    else
+    {
+
+
+         // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
+        image = QImage((const uchar*)fill_color->imageData, fill_color->width, fill_color->height,QImage::Format_RGB888).rgbSwapped();
+
+        if(bool_show_Image)camera_Send_Image();
+    }
+
+    cvReleaseImage(&fill_color);
+    cvReleaseImage(&hsv);
+
+    return 0;
+}
+
+int Camera::auto_position()
+{
+    char image_name[100] = "/home/chg/catkin_ws/src/1.jpg";
+    IplImage* frame_raw = cvLoadImage(image_name);
+    cout<<"Loaded!\n";
 
 
     //创建灰色图像
@@ -225,249 +587,9 @@ int Camera::readFarme()
         }
     }
 
-    //White
-    CvScalar s_white;
-
-    for(int i = 0;i < fill_color->height;i++)
-    {
-        for(int j = 0;j < fill_color->width;j++)
-        {
-            s_white = cvGet2D(hsv,i,j); // get the (i,j) pixel value
-            if(s_white.val[0] >= color_threshold[3][0] && s_white.val[0] <= color_threshold[3][1] &&
-                    s_white.val[1] >= color_threshold[3][2] && s_white.val[1] <= color_threshold[3][3] &&
-                    s_white.val[2] >= color_threshold[3][4] && s_white.val[2] <= color_threshold[3][5])
-            {
-                s.val[0] = 255;
-                s.val[1] = 255;
-                s.val[2] = 255;
-                cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
-            }
-
-        }
-    }
-
-    //Black
-    CvScalar s_black;
-
-    for(int i = 0;i < fill_color->height;i++)
-    {
-        for(int j = 0;j < fill_color->width;j++)
-        {
-            s_black = cvGet2D(hsv,i,j); // get the (i,j) pixel value
-            if(s_black.val[0] >= color_threshold[4][0] && s_black.val[0] <= color_threshold[4][1] &&
-                    s_black.val[1] >= color_threshold[4][2] && s_black.val[1] <= color_threshold[4][3] &&
-                    s_black.val[2] >= color_threshold[4][4] && s_black.val[2] <= color_threshold[4][5])
-            {
-                s.val[0] = 0;
-                s.val[1] = 0;
-                s.val[2] = 0;
-                cvSet2D(fill_color,i,j,s);//set the (i,j) pixel value
-            }
-
-        }
-    }
-
-    /*****Find blue lines ******/
-    CvScalar s_blue_black;
-    IplImage* blue = cvCreateImage(cvGetSize(fill_color), 8, 1);
-
-    for(int i = 0;i < blue->height;i++)
-    {
-        for(int j = 0;j < blue->width;j++)
-        {
-            s_blue_black = cvGet2D(fill_color,i,j); // get the (i,j) pixel value
-            if(s_blue_black.val[0] == 255 && s_blue_black.val[1] == 144 && s_blue_black.val[2] == 30)
-            {
-                cvSet2D(blue,i,j,CV_WHITE);//set the (i,j) pixel value
-            }
-            else
-            {
-                cvSet2D(blue,i,j,CV_BLACK);//set the (i,j) pixel value
-            }
-        }
-    }
-
-    cvErode( blue,blue, NULL, 1);
-    cvDilate( blue,blue, NULL, 3);
-
-    //find lines
-    IplImage* blue_canny = cvCreateImage(cvGetSize(blue), 8, 1);
-    cvCanny(blue, blue_canny, 100, 200, 3);
-
-    CvMemStorage* storage_blue_canny = cvCreateMemStorage(0);
-    CvSeq* lines_blue = 0;
-
-    IplImage* color_blue = cvCreateImage(cvGetSize(blue_canny), 8, 3);
-    cvCvtColor( blue_canny, color_blue, CV_GRAY2BGR );
-
-    lines_blue = cvHoughLines2(blue_canny, storage_blue_canny, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 60, 50, 40);
-    cout<<"total lines "<<lines_blue->total<<endl;
-
-    /***Draw lines**/
-    /*for (int i = 0; i < lines_blue->total; i++)
-    {
-        //point: line[0] and line[1]
-        CvPoint* line = (CvPoint*)cvGetSeqElem(lines_blue, i);
-        cvLine(color_blue, line[0], line[1], CV_BLUE, 1, CV_AA, 0);
-    }*/
 
 
-    /***Find the useful lines***/
-    CvMat* blue_lines_mat = find_useful_lines_kb(lines_blue, raw_image_area_width, raw_image_area_height, 60, 0.2, 20, 80);
-    draw_result_lines(blue_lines_mat, color_blue, CV_BLUE);
-
-    /***Cut the useless area***/
-    float n_b_max = -100000.f;  //k is negative, value b when b is max
-    float n_k_max = 0.f;  //k is negative, value k when b is max
-    float n_b_min = 100000.f;
-    float n_k_min = 0.f;
-    float p_b_max = -100000.f;
-    float p_k_max = 0.f;
-    float p_b_min = 100000.f;
-    float p_k_min = 0.f;
-
-    for(int i = 1; i < CV_MAT_ELEM(*blue_lines_mat, float, 0, 0) + 1; i++)
-    {
-        if(CV_MAT_ELEM(*blue_lines_mat, float, i, 0) < 0)
-        {
-            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) > n_b_max) {
-                n_k_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
-                n_b_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
-            }
-            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) < n_b_min) {
-                n_k_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
-                n_b_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
-            }
-        }
-        else
-        {
-            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) > n_b_max) {
-                p_k_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
-                p_b_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
-            }
-            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) < n_b_min) {
-                p_k_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
-                p_b_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
-            }
-        }
-    }
-
-    if(n_b_max > -100000.f && n_b_min < 100000.f && fabs(n_b_max - n_b_min) > 100.f)
-    {
-        CvScalar s2;
-
-        for(int i = 0;i < fill_color->height;i++)
-        {
-            for(int j = 0;j < fill_color->width;j++)
-            {
-                int x = j;
-                int y = raw_image_area_height - i;
-                if((n_k_max*x-y+n_b_max) < 0 || (n_k_min*x-y+n_b_min) > 0)
-                {
-                    s2 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
-                    s2.val[0]=100;
-                    s2.val[1]=100;
-                    s2.val[2]=100;
-                    cvSet2D(fill_color,i,j,s2);//set the (i,j) pixel value
-                }
-            }
-        }
-    }
-
-    if(p_b_max > -100000.f && p_b_min < 100000.f && fabs(p_b_max - p_b_min) > 100.f)
-    {
-        CvScalar s3;
-
-        for(int i = 0;i < fill_color->height;i++)
-        {
-            for(int j = 0;j < fill_color->width;j++)
-            {
-                int x = j;
-                int y = raw_image_area_height - i;
-                if((p_k_max*x-y+p_b_max) > 0 || (p_k_min*x-y+p_b_min) > 0)
-                {
-                    s3 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
-                    s3.val[0]=100;
-                    s3.val[1]=100;
-                    s3.val[2]=100;
-                    cvSet2D(fill_color,i,j,s3);//set the (i,j) pixel value
-                }
-            }
-        }
-    }
-
-    /***Find robot***/
-    CvScalar s_red_black;
-    IplImage* red = cvCreateImage(cvGetSize(fill_color), 8, 1);
-
-    for(int i = 0;i < red->height;i++)
-    {
-        for(int j = 0;j < red->width;j++)
-        {
-            s_red_black = cvGet2D(fill_color,i,j); // get the (i,j) pixel value
-            if(s_red_black.val[0] == 0 && s_red_black.val[1] == 0 && s_red_black.val[2] == 255)
-            {
-                cvSet2D(red,i,j,CV_WHITE);//set the (i,j) pixel value
-            }
-            else
-            {
-                cvSet2D(red,i,j,CV_BLACK);//set the (i,j) pixel value
-            }
-        }
-    }
-
-
-    cvErode( red, red, NULL, 1);
-    cvDilate( red, red, NULL, 1);
-
-    CvPoint2D32f robot_center;
-    float radius;
-
-    CvMemStorage* red_storage = cvCreateMemStorage(0);
-    CvSeq* red_contours = 0;
-    int contour_num = cvFindContours(red, red_storage, &red_contours, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-    cout<<"contour_num="<<contour_num<<endl;
-    if(contour_num > 0)
-    {
-        cvDrawContours(fill_color, red_contours, CV_GREEN, CV_GREEN, 50);
-
-        CvSeq *c = 0;
-        bool found = false;
-        int counter = 0;
-        robot_image_p[0] = 0.f;
-        robot_image_p[1] = 0.f;
-        for (c = red_contours;c !=NULL;c = c->h_next)
-        {
-            double area = fabs(cvContourArea(c,CV_WHOLE_SEQ));
-            if(area > 200)
-            {
-                cvMinEnclosingCircle(c,&robot_center,&radius);
-                cvCircle(fill_color,cvPointFrom32f(robot_center),4,CV_GREEN,4);
-                robot_image_p[0] += robot_center.x;
-                robot_image_p[1] += raw_image_area_height - robot_center.y;
-                found = true;
-                counter ++;
-            }
-
-        }
-        if(!found)
-        {
-            robot_image_p[0] = 0.f;
-            robot_image_p[1] = 0.f;
-        }
-        else
-        {
-            robot_image_p[0] = robot_image_p[0] / counter;
-            robot_image_p[1] = robot_image_p[1] / counter;
-        }
-    }
-    else
-    {
-        robot_image_p[0] = 0.f;
-        robot_image_p[1] = 0.f;
-    }
-
-
+    cout<<"Find yellow lines\n";
     /*****Find yellow lines ******/
     CvScalar s_yellow_black;
     IplImage* yellow = cvCreateImage(cvGetSize(fill_color), 8, 1);
@@ -505,7 +627,7 @@ int Camera::readFarme()
     cout<<"total lines "<<lines_yellow->total<<endl;
 
     /**Draw lines**/
-    for (int i = 0; i < lines_yellow->total; i++)
+   /* for (int i = 0; i < lines_yellow->total; i++)
     {
         //point: line[0] and line[1]
         CvPoint* line = (CvPoint*)cvGetSeqElem(lines_yellow, i);
@@ -515,7 +637,7 @@ int Camera::readFarme()
 
     /***Find the useful lines***/
     CvMat* yellow_lines_mat = find_useful_lines_kb(lines_yellow, raw_image_area_width, raw_image_area_height, 50, 0.1, neg_d, pos_d);
-    draw_result_lines(yellow_lines_mat, color_yellow, CV_YELLOW);
+    draw_result_lines(yellow_lines_mat, fill_color, CV_YELLOW);
 
 
     /***Classify negtive k lines and positive k lines***/
@@ -526,8 +648,8 @@ int Camera::readFarme()
     int negative_k_total = 0;
     int positive_k_total = 0;
 
-    float negative_k_average = 0.f;
-    float positive_k_average = 0.f;
+    negative_k_average = 0.f;
+    positive_k_average = 0.f;
 
     for(int i = 1; i <= yellow_lines_total; i++)
     {
@@ -638,8 +760,6 @@ int Camera::readFarme()
         float delt_x_scale = 0.2f;
         float delt_y_scale = 0.2f;
         float dist_threshold = 40.f;
-
-        int cross_points_position_enemy[5][5][2] = {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0}; //(image_x, image_y)
 
         if(!camera_left_side) //right, enemy
         {
@@ -807,167 +927,38 @@ int Camera::readFarme()
                 //cout<<"length_point_delt="<<length_point_delt_x<<","<<length_point_delt_y<<" # ";
             }
         }
-
-
-        /***Calculate real position ***/
-        if(robot_image_p[0] > 0.001) //image_position
-        {
-            //rank crosspoints by distance to robot, from small to large
-            float distance_temp[5][5];
-            for(int i = 0; i < 5; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    distance_temp[i][j] = point_distance_f(robot_image_p[0], robot_image_p[1], cross_points_position_enemy[i][j][0], cross_points_position_enemy[i][j][1]);
-                }
-            }
-            //nearest point
-            float min_distance = 10000.f;
-            int min_row, min_col;
-            for(int i = 0; i < 5; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    if(distance_temp[i][j] < min_distance)
-                    {
-                        min_distance = distance_temp[i][j];
-                        min_row = i;
-                        min_col = j;
-                    }
-                }
-            }
-            //second nearest point with different row and col
-            float min_distance_2 = 10000.f;
-            int min_row_2, min_col_2;
-            for(int i = 0; i < 5; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    if(distance_temp[i][j] < min_distance_2 && distance_temp[i][j] > min_distance && i!= min_row && j!=min_col)
-                    {
-                        min_distance_2 = distance_temp[i][j];
-                        min_row_2 = i;
-                        min_col_2 = j;
-                    }
-                }
-            }
-
-
-            if(!camera_left_side)
-            {
-                //when right side
-                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy[min_row][min_col][0], cross_points_position_enemy[min_row][min_col][1]);
-                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy[min_row_2][min_col_2][0], cross_points_position_enemy[min_row_2][min_col_2][1]);
-                CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, robot_image_p[0], robot_image_p[1]);
-
-                float kx = (cross_points_real_position_right_enemy[min_row][min_col][0] - cross_points_real_position_right_enemy[min_row_2][min_col_2][0]) / (min_dist_p1_tr.x - min_dist_p2_tr.x);
-                float ky = (cross_points_real_position_right_enemy[min_row][min_col][1] - cross_points_real_position_right_enemy[min_row_2][min_col_2][1]) / (min_dist_p1_tr.y - min_dist_p2_tr.y);
-
-                robot_real_p[0] = (cross_points_real_position_right_enemy[min_row][min_col][0] + kx*(robot_image_p_tr.x - min_dist_p1_tr.x) + cross_points_real_position_right_enemy[min_row_2][min_col_2][0] + kx*(robot_image_p_tr.x - min_dist_p2_tr.x))/2.f;
-                robot_real_p[1] = (cross_points_real_position_right_enemy[min_row][min_col][1] + ky*(robot_image_p_tr.y - min_dist_p1_tr.y) + cross_points_real_position_right_enemy[min_row_2][min_col_2][1] + ky*(robot_image_p_tr.y - min_dist_p2_tr.y))/2.f;
-            }
-            else
-            {
-                //when left side
-                cout<<"negative_k_average "<<negative_k_average<<"positive_k_average"<<positive_k_average<<"cross_points_position_enemy"<<cross_points_position_enemy[min_row][min_col][0]<<" , "<<cross_points_position_enemy[min_row][min_col][1]<<endl;
-                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy[min_row][min_col][0], cross_points_position_enemy[min_row][min_col][1]);
-                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy[min_row_2][min_col_2][0], cross_points_position_enemy[min_row_2][min_col_2][1]);
-                CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, robot_image_p[0], robot_image_p[1]);
-
-                cout<<"px = "<<min_dist_p1_tr.x<<" , py = "<<min_dist_p1_tr.y<<endl;
-                cout<<"rx = "<<robot_image_p_tr.x<<" , ry = "<<robot_image_p_tr.y<<endl;
-
-                float kx = (cross_points_real_position_left_enemy[min_row][min_col][0] - cross_points_real_position_left_enemy[min_row_2][min_col_2][0]) / (min_dist_p1_tr.x - min_dist_p2_tr.x);
-                float ky = (cross_points_real_position_left_enemy[min_row][min_col][1] - cross_points_real_position_left_enemy[min_row_2][min_col_2][1]) / (min_dist_p1_tr.y - min_dist_p2_tr.y);
-                cout<<"kx = "<<kx<<" , ky = "<<ky<<endl;
-
-                robot_real_p[0] = (cross_points_real_position_left_enemy[min_row][min_col][0] + kx*(robot_image_p_tr.x - min_dist_p1_tr.x) + cross_points_real_position_left_enemy[min_row_2][min_col_2][0] + kx*(robot_image_p_tr.x - min_dist_p2_tr.x))/2.f;
-                robot_real_p[1] = (cross_points_real_position_left_enemy[min_row][min_col][1] + ky*(robot_image_p_tr.y - min_dist_p1_tr.y) + cross_points_real_position_left_enemy[min_row_2][min_col_2][1] + ky*(robot_image_p_tr.y - min_dist_p2_tr.y))/2.f;
-            }
-
-            //position offset
-
-
-            //cout<<"Point1 Position = ("<<cross_points_real_position_right_enemy[min_row][min_col][0]<<","<<cross_points_real_position_right_enemy[min_row][min_col][1]<<")\n";
-            //cout<<"Point2 Position = ("<<cross_points_real_position_right_enemy[min_row_2][min_col_2][0]<<","<<cross_points_real_position_right_enemy[min_row_2][min_col_2][1]<<")\n";
-            cout<<"Robot image Position = ("<<robot_image_p[0]<<","<<robot_image_p[1]<<")\n";
-            cout<<"Robot Real Position = ("<<robot_real_p[0]<<","<<robot_real_p[1]<<")\n";
-            cvCircle(fill_color, cvPoint(cross_points_position_enemy[min_row][min_col][0], raw_image_area_height - cross_points_position_enemy[min_row][min_col][1]), 4, CV_GREEN, 6);
-            cvCircle(fill_color, cvPoint(cross_points_position_enemy[min_row_2][min_col_2][0], raw_image_area_height - cross_points_position_enemy[min_row_2][min_col_2][1]), 4, CV_GREEN, 6);
-        }
-        else
-        {
-            cout<<"Can not find robot!!"<<endl;
-            robot_real_p[0] = -1000.f;
-            robot_real_p[1] = -1000.f;
-        }
-
-
-
-        /***Draw cross points***/
-
-        for(int i = 0; i < 5; i++)
-        {
-            for(int j = 0; j < 5; j++)
-            {
-                int x = cross_points_position_enemy[i][j][0];
-                int y = raw_image_area_height - cross_points_position_enemy[i][j][1];
-                cvCircle(fill_color, cvPoint(x, y), 10, CV_GREEN, 2);
-            }
-
-        }
-        cvCircle(fill_color, cvPoint((int)robot_image_p[0], raw_image_area_height - (int)robot_image_p[1]), 10, CV_RED, 2);
     }
 
 
+    /***Draw cross points***/
+
+    for(int i = 0; i < 5; i++)
+    {
+        for(int j = 0; j < 5; j++)
+        {
+            int x = cross_points_position_enemy[i][j][0];
+            int y = raw_image_area_height - cross_points_position_enemy[i][j][1];
+            cvCircle(fill_color, cvPoint(x, y), 10, CV_GREEN, 2);
+        }
+
+    }
+
+
+    cvNamedWindow("result");
+    cvShowImage("result", fill_color);
+
+    cvWaitKey(0);
 
     /**Release**/
-    cvReleaseMemStorage(&storage_blue_canny);
-    cvReleaseMemStorage(&storage_yellow_canny);
-    cvReleaseMemStorage(&red_storage);
 
-    cvReleaseImage(&blue);
-    cvReleaseImage(&blue_canny);
-    cvReleaseImage(&color_blue);
+    cvReleaseMemStorage(&storage_yellow_canny);
+
 
     cvReleaseImage(&yellow);
     cvReleaseImage(&yellow_canny);
     cvReleaseImage(&color_yellow);
 
-    cvReleaseImage(&red);
-
-    cvReleaseMat(&blue_lines_mat);
     cvReleaseMat(&yellow_lines_mat);
-
-    /***Display**/
-    if(!bool_fill_color)
-    {
-        //窗口大小适应
-        frame=cvCreateImage(cvSize(image_area_width,image_area_height),8,3);//4:3画面
-        cvResize(frame_raw,frame,CV_INTER_NN);
-
-         // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
-        image = QImage((const uchar*)frame->imageData, frame->width, frame->height,QImage::Format_RGB888).rgbSwapped();
-
-        if(bool_show_Image)camera_Send_Image();
-    }
-    else
-    {
-        frame=cvCreateImage(cvSize(image_area_width,image_area_height),8,3);//4:3画面
-        cvResize(fill_color,frame,CV_INTER_NN);
-
-         // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
-        image = QImage((const uchar*)frame->imageData, frame->width, frame->height,QImage::Format_RGB888).rgbSwapped();
-
-        if(bool_show_Image)camera_Send_Image();
-    }
-
-    cvReleaseImage(&fill_color);
-    cvReleaseImage(&hsv);
-
-
-
-    cvReleaseImage(&frame);//释放图像占用的内存
 
     return 0;
 }

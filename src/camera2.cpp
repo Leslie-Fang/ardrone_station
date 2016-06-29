@@ -937,32 +937,22 @@ int Camera2::readFarme()
     /***Display**/
     if(!bool_fill_color)
     {
-        //窗口大小适应
-        frame=cvCreateImage(cvSize(image_area_width_2,image_area_height_2),8,3);//4:3画面
-        cvResize(frame_raw,frame,CV_INTER_NN);
 
          // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
-        image = QImage((const uchar*)frame->imageData, frame->width, frame->height,QImage::Format_RGB888).rgbSwapped();
+        image = QImage((const uchar*)frame_raw->imageData, frame_raw->width, frame_raw->height,QImage::Format_RGB888).rgbSwapped();
 
         if(bool_show_Image)camera_Send_Image();
     }
     else
     {
-        frame=cvCreateImage(cvSize(image_area_width_2,image_area_height_2),8,3);//4:3画面
-        cvResize(fill_color,frame,CV_INTER_NN);
-
          // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
-        image = QImage((const uchar*)frame->imageData, frame->width, frame->height,QImage::Format_RGB888).rgbSwapped();
+        image = QImage((const uchar*)fill_color->imageData, fill_color->width, fill_color->height,QImage::Format_RGB888).rgbSwapped();
 
         if(bool_show_Image)camera_Send_Image();
     }
 
     cvReleaseImage(&fill_color);
     cvReleaseImage(&hsv);
-
-
-
-    cvReleaseImage(&frame);//释放图像占用的内存
 
     return 0;
 }

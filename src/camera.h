@@ -24,10 +24,8 @@
 #define CV_PINK cvScalar(255,170,255,0)
 
 //显示图幅
-#define image_area_width 480
-#define image_area_height 360
 
-#define raw_image_area_width 720
+#define raw_image_area_width 640
 #define raw_image_area_height 480
 
 using namespace std;
@@ -44,6 +42,7 @@ public:
     bool bool_show_Image;
     bool bool_open_camera;
     unsigned int image_counter;
+    int height_threshold;
 
     bool bool_clibration;
     bool bool_clibration_loaded;
@@ -56,16 +55,21 @@ public:
     bool camera_left_side;
     bool camera_enemy_side;
 
+    bool position_clibration_done;
+
     int neg_d;
     int pos_d ;
 
     int camera_number;
+
+    bool capture;
 
 
 public slots:
     bool openCamara();      // 打开摄像头
     int readFarme();       // 读取当前帧信息
     void closeCamara();     // 关闭摄像头。
+    int auto_position();
 
 private:
     QTimer *timer;
@@ -83,14 +87,19 @@ private:
     int line_thickness;
     float optical_distance_last;
 
-    bool if_read;
-
 
     /*position*/
     float robot_image_p[2];
     float robot_real_p[2];
 
     bool found_field;
+
+    int cross_points_position_enemy[5][5][2];
+
+    float positive_k_average;
+    float negative_k_average;
+
+
 
 
     /*functions*/
