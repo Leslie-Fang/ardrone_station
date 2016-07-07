@@ -64,12 +64,16 @@ public:
 
     bool capture;
 
+    float robot_real_p[2];
+    bool robot_position_updated;
+
 
 public slots:
     bool openCamara();      // 打开摄像头
     int readFarme();       // 读取当前帧信息
     void closeCamara();     // 关闭摄像头。
     int auto_position();
+    int mannual_position();
 
 private:
     QTimer *timer;
@@ -90,15 +94,11 @@ private:
 
     /*position*/
     float robot_image_p[2];
-    float robot_real_p[2];
 
     bool found_field;
 
-    int cross_points_position_enemy[5][5][2];
-
     float positive_k_average;
     float negative_k_average;
-
 
 
 

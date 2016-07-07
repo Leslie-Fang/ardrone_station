@@ -134,6 +134,22 @@ private slots:
 
     void on_pushButton_Auto_Position_clicked();
 
+    void on_pushButton_Mannual_Position_clicked();
+
+    void on_radioButton_enemy_1_clicked();
+
+    void on_radioButton_ours_1_clicked();
+
+    void on_radioButton_enemy_2_clicked();
+
+    void on_radioButton_ours_2_clicked();
+
+    void on_horizontalSlider_Height_Threshold_2_sliderMoved(int position);
+
+    void on_pushButton_Auto_Position_2_clicked();
+
+    void on_pushButton_Mannual_Position_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;

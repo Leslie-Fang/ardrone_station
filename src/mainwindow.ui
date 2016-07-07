@@ -379,7 +379,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -699,7 +699,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>V</string>
+          <string>R</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_21">
@@ -712,7 +712,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>H</string>
+          <string>B</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_22">
@@ -725,7 +725,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>S</string>
+          <string>G</string>
          </property>
         </widget>
         <widget class="QWidget" name="layoutWidget_12">
@@ -1169,7 +1169,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab_8">
         <attribute name="title">
@@ -1483,7 +1483,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>V</string>
+          <string>R</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_31">
@@ -1496,7 +1496,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>H</string>
+          <string>B</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_32">
@@ -1509,7 +1509,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>S</string>
+          <string>G</string>
          </property>
         </widget>
         <widget class="QWidget" name="layoutWidget_14">
@@ -2088,7 +2088,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>380</x>
@@ -2123,6 +2123,141 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>580</y>
+         <width>102</width>
+         <height>88</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_41">
+        <item>
+         <widget class="QPushButton" name="pushButton_Restore_Config_">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>参数同化</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_Save_Config">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QFrame" name="frame_3">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>660</y>
+         <width>101</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget_16">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>79</width>
+          <height>52</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_93">
+         <item>
+          <widget class="QRadioButton" name="radioButton_enemy_1">
+           <property name="text">
+            <string>enemy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_ours_1">
+           <property name="text">
+            <string>ours</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QFrame" name="frame_4">
+       <property name="geometry">
+        <rect>
+         <x>1160</x>
+         <y>660</y>
+         <width>101</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget_18">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>79</width>
+          <height>52</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_96">
+         <item>
+          <widget class="QRadioButton" name="radioButton_enemy_2">
+           <property name="text">
+            <string>enemy</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_ours_2">
+           <property name="text">
+            <string>ours</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <zorder>layoutWidget</zorder>
       <zorder>layoutWidget</zorder>
       <zorder>label_Camera</zorder>
       <zorder>layoutWidget_6</zorder>
@@ -2137,15 +2272,16 @@
       <zorder>pushButton_Mannual_Position</zorder>
       <zorder>pushButton_Auto_Position_2</zorder>
       <zorder>pushButton_Mannual_Position_2</zorder>
-      <zorder>horizontalSlider_Height_Threshold</zorder>
-      <zorder>label_36</zorder>
       <zorder>layoutWidget_7</zorder>
+      <zorder>layoutWidget</zorder>
+      <zorder>frame_3</zorder>
+      <zorder>frame_4</zorder>
      </widget>
      <widget class="QTabWidget" name="tabWidget_PaintArea">
       <property name="geometry">
        <rect>
         <x>1450</x>
-        <y>80</y>
+        <y>30</y>
         <width>360</width>
         <height>240</height>
        </rect>
@@ -2420,7 +2556,7 @@
       <property name="geometry">
        <rect>
         <x>1450</x>
-        <y>340</y>
+        <y>310</y>
         <width>360</width>
         <height>270</height>
        </rect>
@@ -2458,56 +2594,6 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>1510</x>
-        <y>9</y>
-        <width>208</width>
-        <height>42</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QPushButton" name="pushButton_Save_Config">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>保存</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_Restore_Config_">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>参数同化</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_6">

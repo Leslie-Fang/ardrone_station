@@ -31,6 +31,7 @@
 
 
 using namespace std;
+using namespace cv;
 
 class Camera2:public QObject
 {
@@ -43,6 +44,7 @@ public:
     bool bool_show_Image;
     bool bool_open_camera;
     unsigned int image_counter;
+    int height_threshold;
 
     bool bool_clibration;
     bool bool_clibration_loaded;
@@ -55,17 +57,25 @@ public:
     bool camera_left_side;
     bool camera_enemy_side;
 
+    bool position_clibration_done;
+
     int neg_d;
     int pos_d ;
 
     int camera_number;
+
+    bool capture;
+
+    float robot_real_p[2];
+    bool robot_position_updated;
 
 
 public slots:
     bool openCamara();      // 打开摄像头
     int readFarme();       // 读取当前帧信息
     void closeCamara();     // 关闭摄像头。
-
+    int auto_position();
+    int mannual_position();
 
 private:
     QTimer *timer;
@@ -86,9 +96,12 @@ private:
 
     /*position*/
     float robot_image_p[2];
-    float robot_real_p[2];
 
     bool found_field;
+
+    float positive_k_average;
+    float negative_k_average;
+
 
 
     /*functions*/
@@ -114,5 +127,4 @@ private:
 signals:
     void camera_Image_Signal()const;
 };
-
 #endif

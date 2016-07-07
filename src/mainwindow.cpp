@@ -195,8 +195,13 @@ void MainWindow::init_paras()
     ui->radioButton_left_1->setChecked(true);
     ui->radioButton_right_2->setChecked(true);
 
+    ui->radioButton_enemy_1->setChecked(true);
+    ui->radioButton_ours_2->setChecked(true);
+
     camera_video.camera_left_side = true;
+    camera_video.camera_enemy_side = true;
     camera2_video.camera_left_side = false;
+    camera2_video.camera_enemy_side = false;
 }
 
 int MainWindow::read_saved_paras()
@@ -686,13 +691,15 @@ void MainWindow::on_radioButton_right_2_clicked()
     camera2_video.camera_left_side = false;
 }
 
-
-
 void MainWindow::on_horizontalSlider_Height_Threshold_sliderMoved(int position)
 {
     camera_video.height_threshold = ui->horizontalSlider_Height_Threshold->value();
 }
 
+void MainWindow::on_horizontalSlider_Height_Threshold_2_sliderMoved(int position)
+{
+    camera2_video.height_threshold = ui->horizontalSlider_Height_Threshold_2->value();
+}
 
 void MainWindow::on_pushButton_Auto_Position_clicked()
 {
@@ -708,4 +715,52 @@ void MainWindow::on_pushButton_Auto_Position_clicked()
     else if (button == QMessageBox::Yes) {
         camera_video.position_clibration_done = true;
     }
+}
+
+void MainWindow::on_pushButton_Mannual_Position_clicked()
+{
+    camera_video.mannual_position();
+}
+
+void MainWindow::on_radioButton_enemy_1_clicked()
+{
+    camera_video.camera_enemy_side  = true;
+}
+
+void MainWindow::on_radioButton_ours_1_clicked()
+{
+    camera_video.camera_enemy_side  = false;
+}
+
+void MainWindow::on_radioButton_enemy_2_clicked()
+{
+    camera2_video.camera_enemy_side = true;
+}
+
+void MainWindow::on_radioButton_ours_2_clicked()
+{
+    camera2_video.camera_enemy_side = false;
+}
+
+
+
+void MainWindow::on_pushButton_Auto_Position_2_clicked()
+{
+    camera2_video.capture = true;
+
+    QMessageBox::StandardButton button;
+    button = QMessageBox::question(this, tr("注意"),
+                                   QString(tr("满足要求?")),
+                                   QMessageBox::Yes | QMessageBox::No);
+    if (button == QMessageBox::No) {
+        camera2_video.position_clibration_done = false;
+    }
+    else if (button == QMessageBox::Yes) {
+        camera2_video.position_clibration_done = true;
+    }
+}
+
+void MainWindow::on_pushButton_Mannual_Position_2_clicked()
+{
+    camera2_video.mannual_position();
 }
