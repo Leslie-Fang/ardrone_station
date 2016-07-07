@@ -710,10 +710,10 @@ void MainWindow::on_pushButton_Auto_Position_clicked()
                                    QString(tr("满足要求?")),
                                    QMessageBox::Yes | QMessageBox::No);
     if (button == QMessageBox::No) {
-        camera_video.position_clibration_done = false;
+        camera_video.bool_cut = false;
     }
     else if (button == QMessageBox::Yes) {
-        camera_video.position_clibration_done = true;
+        camera_video.bool_cut = true;
     }
 }
 
@@ -753,14 +753,28 @@ void MainWindow::on_pushButton_Auto_Position_2_clicked()
                                    QString(tr("满足要求?")),
                                    QMessageBox::Yes | QMessageBox::No);
     if (button == QMessageBox::No) {
-        camera2_video.position_clibration_done = false;
+        camera2_video.bool_cut = false;
     }
     else if (button == QMessageBox::Yes) {
-        camera2_video.position_clibration_done = true;
+        camera2_video.bool_cut = true;
     }
 }
 
 void MainWindow::on_pushButton_Mannual_Position_2_clicked()
 {
     camera2_video.mannual_position();
+}
+
+void MainWindow::on_checkBox_cut_area_clicked(bool checked)
+{
+    if(checked) camera_video.bool_cut_ticked = true;
+    else camera_video.bool_cut_ticked = false;
+}
+
+
+
+void MainWindow::on_checkBox_cut_area_2_clicked(bool checked)
+{
+    if(checked) camera2_video.bool_cut_ticked = true;
+    else camera2_video.bool_cut_ticked = false;
 }

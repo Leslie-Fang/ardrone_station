@@ -2257,6 +2257,44 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QCheckBox" name="checkBox_cut_area">
+       <property name="geometry">
+        <rect>
+         <x>590</x>
+         <y>520</y>
+         <width>90</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>内部图像</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_cut_area_2">
+       <property name="geometry">
+        <rect>
+         <x>1240</x>
+         <y>520</y>
+         <width>90</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>内部图像</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
       <zorder>layoutWidget</zorder>
       <zorder>layoutWidget</zorder>
       <zorder>label_Camera</zorder>
@@ -2276,6 +2314,8 @@
       <zorder>layoutWidget</zorder>
       <zorder>frame_3</zorder>
       <zorder>frame_4</zorder>
+      <zorder>checkBox_cut_area</zorder>
+      <zorder>checkBox_cut_area_2</zorder>
      </widget>
      <widget class="QTabWidget" name="tabWidget_PaintArea">
       <property name="geometry">

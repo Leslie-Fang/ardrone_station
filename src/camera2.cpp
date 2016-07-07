@@ -10,7 +10,8 @@ extern MavrosMessage message;
 
 void onMouse2(int Event,int x,int y,int flags,void* param);
 int mouse_click_counter_2 = 0;
-int cross_points_position_enemy_2[5][5][2];
+int cross_points_position_2[5][5][2];
+int cross_points_position_save_2[5][5][2];
 
 float cross_points_real_position_right_enemy_2[5][5][2] = {  //from left up corner, rows and cols
     3.15f, 1.2f, 3.15f, 0.6f, 3.15f, 0.f, 3.15f, -0.6f, 3.15f, -1.2f,
@@ -86,8 +87,10 @@ void Camera2::init_paras()
 
     capture = false;
 
-    //camera_left_side = false;
-    camera_enemy_side = true;
+    bool_cut = false;
+
+    robot_position_updated = false;
+
     position_clibration_done = false;
 
     height_threshold = 0;
@@ -120,6 +123,58 @@ void Camera2::init_paras()
             cross_points_real_position_left_ours_2[i][j][1] = cross_points_real_position_right_ours_2[i][4-j][1];
         }
     }
+
+    read_saved_cross_points();
+}
+
+int Camera2::read_saved_cross_points()
+{
+    char dir_path[80]="/home/chg/catkin_ws/src/ardrone_station/parameters";
+
+    QDir *temp = new QDir;
+    bool exist = temp->exists(QString(dir_path));
+    if(!exist)
+    {
+        cout<<"no cross points file found!"<<endl;
+        return 0;
+    }
+
+    char path1[100];
+    strcpy(path1,dir_path);
+    char name1[25] = "/camera_position_2.txt";
+    strcat(path1,name1);
+
+    fstream config_f1;
+    config_f1.open(path1,ios::in);
+
+    int read_counter=0;
+    while(!config_f1.eof())
+    {   //while not the end of file
+        char str[30];
+        config_f1 >> str;
+
+        int num = 0;
+        int start_place = 0;
+        for(int i=0;i<30;i++)
+        {
+            if(str[i]=='#') { start_place = i; break;}
+        }
+
+        for(int j=start_place-1, times=1; j>=0; j--)
+        {
+            num += (str[j]-'0') * times;
+            times *= 10;
+        }
+        cross_points_position_2[read_counter/10][(read_counter%10)/2][read_counter%2] = num;
+
+        read_counter ++;
+    }
+    config_f1.close(); //reading finished
+
+    position_clibration_done = true;
+    cout<<"cross points file found!"<<"  read_counter="<<read_counter<<endl;
+
+    return 1;
 }
 
 bool Camera2::openCamara()
@@ -314,6 +369,55 @@ int Camera2::readFarme()
         }
     }*/
 
+    /*cut useless area*/
+    if(bool_cut && bool_cut_ticked)
+    {
+        if(n_b_max > -100000.f && n_b_min < 100000.f && fabs(n_b_max - n_b_min) > 100.f)
+        {
+            CvScalar s2;
+
+            for(int i = 0;i < fill_color->height;i++)
+            {
+                for(int j = 0;j < fill_color->width;j++)
+                {
+                    int x = j;
+                    int y = raw_image_area_height_2 - i;
+                    if((n_k_max*x-y+n_b_max) < 0 || (n_k_min*x-y+n_b_min) > 0)
+                    {
+                        s2 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
+                        s2.val[0]=100;
+                        s2.val[1]=100;
+                        s2.val[2]=100;
+                        cvSet2D(fill_color,i,j,s2);//set the (i,j) pixel value
+                    }
+                }
+            }
+        }
+
+        if(p_b_max > -100000.f && p_b_min < 100000.f && fabs(p_b_max - p_b_min) > 100.f)
+        {
+            CvScalar s3;
+
+            for(int i = 0;i < fill_color->height;i++)
+            {
+                for(int j = 0;j < fill_color->width;j++)
+                {
+                    int x = j;
+                    int y = raw_image_area_height_2 - i;
+                    if((p_k_max*x-y+p_b_max) > 0 || (p_k_min*x-y+p_b_min) > 0)
+                    {
+                        s3 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
+                        s3.val[0]=100;
+                        s3.val[1]=100;
+                        s3.val[2]=100;
+                        cvSet2D(fill_color,i,j,s3);//set the (i,j) pixel value
+                    }
+                }
+            }
+        }
+    }
+
+
     /***Find robot***/
     if(position_clibration_done)
     {
@@ -401,7 +505,7 @@ int Camera2::readFarme()
             {
                 for(int j = 0; j < 5; j++)
                 {
-                    distance_temp[i][j] = point_distance_f(robot_image_p[0], robot_image_p[1], cross_points_position_enemy_2[i][j][0], cross_points_position_enemy_2[i][j][1]);
+                    distance_temp[i][j] = point_distance_f(robot_image_p[0], robot_image_p[1], cross_points_position_2[i][j][0], cross_points_position_2[i][j][1]);
                 }
             }
             //nearest point
@@ -439,8 +543,8 @@ int Camera2::readFarme()
             if(!camera_left_side)
             {
                 //when right side
-                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy_2[min_row][min_col][0], cross_points_position_enemy_2[min_row][min_col][1]);
-                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_enemy_2[min_row_2][min_col_2][0], cross_points_position_enemy_2[min_row_2][min_col_2][1]);
+                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_2[min_row][min_col][0], cross_points_position_2[min_row][min_col][1]);
+                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, cross_points_position_2[min_row_2][min_col_2][0], cross_points_position_2[min_row_2][min_col_2][1]);
                 CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(positive_k_average, negative_k_average, robot_image_p[0], robot_image_p[1]);
 
                 if(camera_enemy_side)
@@ -464,9 +568,9 @@ int Camera2::readFarme()
             else
             {
                 //when left side
-                cout<<"negative_k_average "<<negative_k_average<<"positive_k_average"<<positive_k_average<<"cross_points_position_enemy_2"<<cross_points_position_enemy_2[min_row][min_col][0]<<" , "<<cross_points_position_enemy_2[min_row][min_col][1]<<endl;
-                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy_2[min_row][min_col][0], cross_points_position_enemy_2[min_row][min_col][1]);
-                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_enemy_2[min_row_2][min_col_2][0], cross_points_position_enemy_2[min_row_2][min_col_2][1]);
+                cout<<"negative_k_average "<<negative_k_average<<"positive_k_average"<<positive_k_average<<"cross_points_position_2"<<cross_points_position_2[min_row][min_col][0]<<" , "<<cross_points_position_2[min_row][min_col][1]<<endl;
+                CvPoint2D32f min_dist_p1_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_2[min_row][min_col][0], cross_points_position_2[min_row][min_col][1]);
+                CvPoint2D32f min_dist_p2_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, cross_points_position_2[min_row_2][min_col_2][0], cross_points_position_2[min_row_2][min_col_2][1]);
                 CvPoint2D32f robot_image_p_tr = point_slant_coordinate_tranlate(negative_k_average, positive_k_average, robot_image_p[0], robot_image_p[1]);
 
                 cout<<"px = "<<min_dist_p1_tr.x<<" , py = "<<min_dist_p1_tr.y<<endl;
@@ -511,8 +615,8 @@ int Camera2::readFarme()
             //cout<<"Point2 Position = ("<<cross_points_real_position_right_enemy_2[min_row_2][min_col_2][0]<<","<<cross_points_real_position_right_enemy_2[min_row_2][min_col_2][1]<<")\n";
             cout<<"Robot image Position = ("<<robot_image_p[0]<<","<<robot_image_p[1]<<")\n";
             cout<<"Robot Real Position = ("<<robot_real_p[0]<<","<<robot_real_p[1]<<")\n";
-            cvCircle(fill_color, cvPoint(cross_points_position_enemy_2[min_row][min_col][0], raw_image_area_height_2 - cross_points_position_enemy_2[min_row][min_col][1]), 4, CV_GREEN_2, 6);
-            cvCircle(fill_color, cvPoint(cross_points_position_enemy_2[min_row_2][min_col_2][0], raw_image_area_height_2 - cross_points_position_enemy_2[min_row_2][min_col_2][1]), 4, CV_GREEN_2, 6);
+            cvCircle(fill_color, cvPoint(cross_points_position_2[min_row][min_col][0], raw_image_area_height_2 - cross_points_position_2[min_row][min_col][1]), 4, CV_GREEN_2, 6);
+            cvCircle(fill_color, cvPoint(cross_points_position_2[min_row_2][min_col_2][0], raw_image_area_height_2 - cross_points_position_2[min_row_2][min_col_2][1]), 4, CV_GREEN_2, 6);
             cvCircle(fill_color, cvPoint((int)robot_image_p[0], raw_image_area_height_2 - (int)robot_image_p[1]), 10, CV_RED_2, 2);
         }
         else
@@ -910,16 +1014,16 @@ int Camera2::auto_position()
         width_point_delt_x = gamma_point[0] - alfa_point[0];
         width_point_delt_y = gamma_point[1] - alfa_point[1];
 
-        cross_points_position_enemy_2[0][0][0] = alfa_point[0];
-        cross_points_position_enemy_2[0][0][1] = alfa_point[1];
+        cross_points_position_2[0][0][0] = alfa_point[0];
+        cross_points_position_2[0][0][1] = alfa_point[1];
 
         cvCircle(fill_color, cvPoint(alfa_point[0], raw_image_area_height_2 - alfa_point[1]), 4, CV_PINK_2, 6);
 
         for(int i = 1; i < 5; i++)
         {
             //predict position
-            int predict_x = cross_points_position_enemy_2[0][i-1][0] + (int)(width_point_delt_x * (1 + delt_x_scale));
-            int predict_y = cross_points_position_enemy_2[0][i-1][1] + (int)(width_point_delt_y * (1 + delt_y_scale));
+            int predict_x = cross_points_position_2[0][i-1][0] + (int)(width_point_delt_x * (1 + delt_x_scale));
+            int predict_y = cross_points_position_2[0][i-1][1] + (int)(width_point_delt_y * (1 + delt_y_scale));
 
             int near_points_counter = 0;
             float threshold_x = length_point_delt_x / 3.5f;
@@ -929,28 +1033,28 @@ int Camera2::auto_position()
             {
                 if(fabs(predict_x - cross_points_yellow[j][0])< threshold_x&& fabs(predict_y-cross_points_yellow[j][1])<threshold_y)
                 {
-                    cross_points_position_enemy_2[1][i][0] += cross_points_yellow[j][0];
-                    cross_points_position_enemy_2[1][i][1] += cross_points_yellow[j][1];
+                    cross_points_position_2[1][i][0] += cross_points_yellow[j][0];
+                    cross_points_position_2[1][i][1] += cross_points_yellow[j][1];
                     near_points_counter ++;
                 }
             }
             if(near_points_counter > 0)
             {
-                cross_points_position_enemy_2[0][i][0] = cross_points_position_enemy_2[0][i][0]/near_points_counter;
-                cross_points_position_enemy_2[0][i][1] = cross_points_position_enemy_2[0][i][1]/near_points_counter;
+                cross_points_position_2[0][i][0] = cross_points_position_2[0][i][0]/near_points_counter;
+                cross_points_position_2[0][i][1] = cross_points_position_2[0][i][1]/near_points_counter;
             }
             else
             {
-                cross_points_position_enemy_2[0][i][0] = predict_x;
-                cross_points_position_enemy_2[0][i][1] = predict_y;
+                cross_points_position_2[0][i][0] = predict_x;
+                cross_points_position_2[0][i][1] = predict_y;
                 //cout<<"5\n";
             }
 
             width_point_delt_x_last = width_point_delt_x;
             width_point_delt_y_last = width_point_delt_y;
             //cout<<"6\n";
-            width_point_delt_x = cross_points_position_enemy_2[0][i][0] - cross_points_position_enemy_2[0][i-1][0];
-            width_point_delt_y = cross_points_position_enemy_2[0][i][1] - cross_points_position_enemy_2[0][i-1][1];
+            width_point_delt_x = cross_points_position_2[0][i][0] - cross_points_position_2[0][i-1][0];
+            width_point_delt_y = cross_points_position_2[0][i][1] - cross_points_position_2[0][i-1][1];
             //cout<<"7\n";
             delt_x_scale = fabs((float)width_point_delt_x)/fabs((float)width_point_delt_x_last) - 1.1f;
             delt_y_scale = fabs((float)width_point_delt_y)/fabs((float)width_point_delt_y_last) - 1.1f;
@@ -961,8 +1065,8 @@ int Camera2::auto_position()
         width_point_delt_x = theta_point[0] - beta_point[0];
         width_point_delt_y = theta_point[1] - beta_point[1];
 
-        cross_points_position_enemy_2[1][0][0] = beta_point[0];
-        cross_points_position_enemy_2[1][0][1] = beta_point[1];
+        cross_points_position_2[1][0][0] = beta_point[0];
+        cross_points_position_2[1][0][1] = beta_point[1];
 
         delt_x_scale = 0.2f;
         delt_y_scale = 0.2f;
@@ -970,8 +1074,8 @@ int Camera2::auto_position()
         for(int i = 1; i < 5; i++)
         {
             //predict position
-            int predict_x = cross_points_position_enemy_2[1][i-1][0] + (int)(width_point_delt_x * (1 + delt_x_scale));
-            int predict_y = cross_points_position_enemy_2[1][i-1][1] + (int)(width_point_delt_y * (1 + delt_y_scale));
+            int predict_x = cross_points_position_2[1][i-1][0] + (int)(width_point_delt_x * (1 + delt_x_scale));
+            int predict_y = cross_points_position_2[1][i-1][1] + (int)(width_point_delt_y * (1 + delt_y_scale));
 
             int near_points_counter = 0;
             float threshold_x = length_point_delt_x / 3.5f;
@@ -981,26 +1085,26 @@ int Camera2::auto_position()
             {
                 if(fabs(predict_x - cross_points_yellow[j][0])< threshold_x&& fabs(predict_y-cross_points_yellow[j][1])<threshold_y)
                 {
-                    cross_points_position_enemy_2[1][i][0] += cross_points_yellow[j][0];
-                    cross_points_position_enemy_2[1][i][1] += cross_points_yellow[j][1];
+                    cross_points_position_2[1][i][0] += cross_points_yellow[j][0];
+                    cross_points_position_2[1][i][1] += cross_points_yellow[j][1];
                     near_points_counter ++;
                 }
             }
             if(near_points_counter > 0)
             {
-                cross_points_position_enemy_2[1][i][0] = cross_points_position_enemy_2[1][i][0]/near_points_counter;
-                cross_points_position_enemy_2[1][i][1] = cross_points_position_enemy_2[1][i][1]/near_points_counter;
+                cross_points_position_2[1][i][0] = cross_points_position_2[1][i][0]/near_points_counter;
+                cross_points_position_2[1][i][1] = cross_points_position_2[1][i][1]/near_points_counter;
             }
             else
             {
-                cross_points_position_enemy_2[1][i][0] = predict_x;
-                cross_points_position_enemy_2[1][i][1] = predict_y;
+                cross_points_position_2[1][i][0] = predict_x;
+                cross_points_position_2[1][i][1] = predict_y;
             }
 
             width_point_delt_x_last = width_point_delt_x;
             width_point_delt_y_last = width_point_delt_y;
-            width_point_delt_x = cross_points_position_enemy_2[1][i][0] - cross_points_position_enemy_2[1][i-1][0];
-            width_point_delt_y = cross_points_position_enemy_2[1][i][1] - cross_points_position_enemy_2[1][i-1][1];
+            width_point_delt_x = cross_points_position_2[1][i][0] - cross_points_position_2[1][i-1][0];
+            width_point_delt_y = cross_points_position_2[1][i][1] - cross_points_position_2[1][i-1][1];
             delt_x_scale = fabs((float)width_point_delt_x)/fabs((float)width_point_delt_x_last) - 1.1f;
             delt_y_scale = fabs((float)width_point_delt_y)/fabs((float)width_point_delt_y_last) - 1.1f;
             //cout<<"a time \n";
@@ -1013,14 +1117,14 @@ int Camera2::auto_position()
             delt_x_scale = 0.2f;
             delt_y_scale = 0.2f;
 
-            length_point_delt_x = cross_points_position_enemy_2[1][j][0]- cross_points_position_enemy_2[0][j][0];
-            length_point_delt_y = cross_points_position_enemy_2[1][j][1]- cross_points_position_enemy_2[0][j][1];
+            length_point_delt_x = cross_points_position_2[1][j][0]- cross_points_position_2[0][j][0];
+            length_point_delt_y = cross_points_position_2[1][j][1]- cross_points_position_2[0][j][1];
             //cout<<"length_point_delt="<<length_point_delt_x<<","<<length_point_delt_y<<" * ";
 
             for(int i = 2; i < 5; i++)
             {
-                int predict_x = cross_points_position_enemy_2[i-1][j][0] + (int)(length_point_delt_x * (1 + delt_x_scale));
-                int predict_y = cross_points_position_enemy_2[i-1][j][1] + (int)(length_point_delt_y * (1 + delt_y_scale));
+                int predict_x = cross_points_position_2[i-1][j][0] + (int)(length_point_delt_x * (1 + delt_x_scale));
+                int predict_y = cross_points_position_2[i-1][j][1] + (int)(length_point_delt_y * (1 + delt_y_scale));
                 //cout<<"("<<i<<","<<j<<")=("<<predict_x<<","<<predict_y<<")    ";
 
 
@@ -1032,26 +1136,26 @@ int Camera2::auto_position()
                 {
                     if(fabs(predict_x - cross_points_yellow[m][0])< threshold_x&& fabs(predict_y-cross_points_yellow[m][1])<threshold_y)
                     {
-                        cross_points_position_enemy_2[i][j][0] += cross_points_yellow[m][0];
-                        cross_points_position_enemy_2[i][j][1] += cross_points_yellow[m][1];
+                        cross_points_position_2[i][j][0] += cross_points_yellow[m][0];
+                        cross_points_position_2[i][j][1] += cross_points_yellow[m][1];
                         near_points_counter ++;
                     }
                 }
                 if(near_points_counter > 0)
                 {
-                    cross_points_position_enemy_2[i][j][0] = cross_points_position_enemy_2[i][j][0]/near_points_counter;
-                    cross_points_position_enemy_2[i][j][1] = cross_points_position_enemy_2[i][j][1]/near_points_counter;
+                    cross_points_position_2[i][j][0] = cross_points_position_2[i][j][0]/near_points_counter;
+                    cross_points_position_2[i][j][1] = cross_points_position_2[i][j][1]/near_points_counter;
                 }
                 else
                 {
-                    cross_points_position_enemy_2[i][j][0] = predict_x;
-                    cross_points_position_enemy_2[i][j][1] = predict_y;
+                    cross_points_position_2[i][j][0] = predict_x;
+                    cross_points_position_2[i][j][1] = predict_y;
                 }
 
                 length_point_delt_x_last = length_point_delt_x;
                 length_point_delt_y_last = length_point_delt_y;
-                length_point_delt_x = cross_points_position_enemy_2[i][j][0] - cross_points_position_enemy_2[i-1][j][0];
-                length_point_delt_y = cross_points_position_enemy_2[i][j][1] - cross_points_position_enemy_2[i-1][j][1];
+                length_point_delt_x = cross_points_position_2[i][j][0] - cross_points_position_2[i-1][j][0];
+                length_point_delt_y = cross_points_position_2[i][j][1] - cross_points_position_2[i-1][j][1];
                 delt_x_scale = fabs((float)length_point_delt_x)/fabs((float)length_point_delt_x_last) - 1.1f;
                 delt_y_scale = fabs((float)length_point_delt_y)/fabs((float)length_point_delt_y_last) - 1.1f;
                 //cout<<"length_point_delt="<<length_point_delt_x<<","<<length_point_delt_y<<" # ";
@@ -1059,6 +1163,131 @@ int Camera2::auto_position()
         }
     }
 
+    /*****Find blue lines ******/
+    CvScalar s_blue_black;
+    IplImage* blue = cvCreateImage(cvGetSize(fill_color), 8, 1);
+
+    for(int i = 0;i < blue->height;i++)
+    {
+        for(int j = 0;j < blue->width;j++)
+        {
+            s_blue_black = cvGet2D(fill_color,i,j); // get the (i,j) pixel value
+            if(s_blue_black.val[0] == 255 && s_blue_black.val[1] == 144 && s_blue_black.val[2] == 30)
+            {
+                cvSet2D(blue,i,j,CV_WHITE_2);//set the (i,j) pixel value
+            }
+            else
+            {
+                cvSet2D(blue,i,j,CV_BLACK_2);//set the (i,j) pixel value
+            }
+        }
+    }
+
+    cvErode( blue,blue, NULL, 1);
+    cvDilate( blue,blue, NULL, 3);
+
+    //find lines
+    IplImage* blue_canny = cvCreateImage(cvGetSize(blue), 8, 1);
+    cvCanny(blue, blue_canny, 100, 200, 3);
+
+    CvMemStorage* storage_blue_canny = cvCreateMemStorage(0);
+    CvSeq* lines_blue = 0;
+
+    IplImage* color_blue = cvCreateImage(cvGetSize(blue_canny), 8, 3);
+    cvCvtColor( blue_canny, color_blue, CV_GRAY2BGR );
+
+    lines_blue = cvHoughLines2(blue_canny, storage_blue_canny, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 60, 50, 40);
+    cout<<"total lines "<<lines_blue->total<<endl;
+
+
+    /***Find the useful lines***/
+    CvMat* blue_lines_mat = find_useful_lines_kb(lines_blue, raw_image_area_width_2, raw_image_area_height_2, 60, 0.2, 20, 80);
+
+
+    /***Cut the useless area***/
+    n_b_max = -100000.f;  //k is negative, value b when b is max
+    n_k_max = 0.f;  //k is negative, value k when b is max
+    n_b_min = 100000.f;
+    n_k_min = 0.f;
+    p_b_max = -100000.f;
+    p_k_max = 0.f;
+    p_b_min = 100000.f;
+    p_k_min = 0.f;
+
+    //find max and min
+
+    for(int i = 1; i < CV_MAT_ELEM(*blue_lines_mat, float, 0, 0) + 1; i++)
+    {
+        if(CV_MAT_ELEM(*blue_lines_mat, float, i, 0) < 0)
+        {
+            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) > n_b_max) {
+                n_k_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
+                n_b_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
+            }
+            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) < n_b_min) {
+                n_k_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
+                n_b_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
+            }
+        }
+        else
+        {
+            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) > n_b_max) {
+                p_k_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
+                p_b_max = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
+            }
+            if(CV_MAT_ELEM(*blue_lines_mat, float, i, 1) < n_b_min) {
+                p_k_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 0);
+                p_b_min = CV_MAT_ELEM(*blue_lines_mat, float, i, 1);
+            }
+        }
+    }
+
+    //cut area
+    if(n_b_max > -100000.f && n_b_min < 100000.f && fabs(n_b_max - n_b_min) > 100.f)
+    {
+        CvScalar s2;
+
+        for(int i = 0;i < fill_color->height;i++)
+        {
+            for(int j = 0;j < fill_color->width;j++)
+            {
+                int x = j;
+                int y = raw_image_area_height_2 - i;
+                if((n_k_max*x-y+n_b_max) < 0 || (n_k_min*x-y+n_b_min) > 0)
+                {
+                    s2 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
+                    s2.val[0]=100;
+                    s2.val[1]=100;
+                    s2.val[2]=100;
+                    cvSet2D(fill_color,i,j,s2);//set the (i,j) pixel value
+                }
+            }
+        }
+    }
+
+    if(p_b_max > -100000.f && p_b_min < 100000.f && fabs(p_b_max - p_b_min) > 100.f)
+    {
+        CvScalar s3;
+
+        for(int i = 0;i < fill_color->height;i++)
+        {
+            for(int j = 0;j < fill_color->width;j++)
+            {
+                int x = j;
+                int y = raw_image_area_height_2 - i;
+                if((p_k_max*x-y+p_b_max) > 0 || (p_k_min*x-y+p_b_min) > 0)
+                {
+                    s3 = cvGet2D(fill_color,i,j); // get the (i,j) pixel value, rows, cols
+                    s3.val[0]=100;
+                    s3.val[1]=100;
+                    s3.val[2]=100;
+                    cvSet2D(fill_color,i,j,s3);//set the (i,j) pixel value
+                }
+            }
+        }
+    }
+
+    draw_result_lines(blue_lines_mat, fill_color, CV_BLUE_2);
 
     /***Draw cross points***/
 
@@ -1066,8 +1295,8 @@ int Camera2::auto_position()
     {
         for(int j = 0; j < 5; j++)
         {
-            int x = cross_points_position_enemy_2[i][j][0];
-            int y = raw_image_area_height_2 - cross_points_position_enemy_2[i][j][1];
+            int x = cross_points_position_2[i][j][0];
+            int y = raw_image_area_height_2 - cross_points_position_2[i][j][1];
             if(i<2) cvCircle(fill_color, cvPoint(x, y), 10, CV_GREEN_2, 2);
             else cvCircle(fill_color, cvPoint(x, y), 10, CV_BROWN_2, 2);
         }
@@ -1078,10 +1307,11 @@ int Camera2::auto_position()
     cvNamedWindow("result");
     cvShowImage("result", fill_color);
 
-    cvWaitKey(1000);
+    cvWaitKey(2000);
 
     /**Release**/
     cvDestroyWindow("result");
+
     cvReleaseMemStorage(&storage_yellow_canny);
 
     cvReleaseImage(&frame_raw);
@@ -1090,6 +1320,12 @@ int Camera2::auto_position()
     cvReleaseImage(&color_yellow);
 
     cvReleaseMat(&yellow_lines_mat);
+
+    cvReleaseImage(&blue);
+    cvReleaseImage(&blue_canny);
+    cvReleaseImage(&color_blue);
+    cvReleaseMemStorage(&storage_blue_canny);
+    cvReleaseMat(&blue_lines_mat);
 
     openCamara();
 
@@ -1117,8 +1353,8 @@ int Camera2::mannual_position()
         cvCopyImage(frame_raw,frame_circles);
         for(int i = 0;i < mouse_click_counter_2;i++)
         {
-            int x = cross_points_position_enemy_2[(mouse_click_counter_2-1)/5][(mouse_click_counter_2-1)%5][0];
-            int y = raw_image_area_height_2 - cross_points_position_enemy_2[(mouse_click_counter_2-1)/5][(mouse_click_counter_2-1)%5][1];
+            int x = cross_points_position_2[i/5][i%5][0];
+            int y = raw_image_area_height_2 - cross_points_position_2[i/5][i%5][1];
             cvCircle(frame_circles, cvPoint(x,y),6,CV_WHITE_2,2);
         }
         cvShowImage("MannualClibration",frame_circles);
@@ -1127,6 +1363,38 @@ int Camera2::mannual_position()
         if(cvWaitKey(30)==27) break;
         if(mouse_click_counter_2 == 25) break;
     }
+
+    char dir_path[80]="/home/chg/catkin_ws/src/ardrone_station/parameters";
+
+    QDir *temp = new QDir;
+    bool exist = temp->exists(QString(dir_path));
+    if(!exist)temp->mkdir(QString(dir_path));
+
+    //parameters for camera 2
+    char path1[100];
+    strcpy(path1,dir_path);
+    char name1[25] = "/camera_position_2.txt";
+    strcat(path1,name1);
+
+    FILE *pTxtFile1 = NULL;
+
+    pTxtFile1 = fopen(path1, "w+");
+    if (pTxtFile1 == NULL)
+    {
+        printf("The program exist!\n");
+        return 0;
+    }
+
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<5;j++)
+        {
+            fprintf(pTxtFile1,"%d#\n",cross_points_position_save_2[i][j][0]);
+            fprintf(pTxtFile1,"%d#\n",cross_points_position_save_2[i][j][1]);
+        }
+    }
+
+    fclose(pTxtFile1);
 
     cvDestroyWindow("MannualClibration");
     cvReleaseImage(&frame_circles);
@@ -1338,8 +1606,12 @@ void onMouse2(int Event,int x,int y,int flags,void* param)
         cout<<"position"<<x<<","<<y<<"   ";
         if(mouse_click_counter_2 < 25) mouse_click_counter_2 ++;
         cout<<mouse_click_counter_2<<"/25"<<endl;
-        cross_points_position_enemy_2[(mouse_click_counter_2-1)/5][(mouse_click_counter_2-1)%5][0] = x;
-        cross_points_position_enemy_2[(mouse_click_counter_2-1)/5][(mouse_click_counter_2-1)%5][1] = raw_image_area_height_2 - y;
+        int i = (mouse_click_counter_2-1)/5;
+        int j = (mouse_click_counter_2-1)%5;
+        cross_points_position_2[i][j][0] = x;
+        cross_points_position_2[i][j][1] = raw_image_area_height_2 - y;
+        cross_points_position_save_2[i][j][0] = x;
+        cross_points_position_save_2[i][j][1] = raw_image_area_height_2 - y;
     }
     else if(Event == CV_EVENT_RBUTTONDOWN)
     {

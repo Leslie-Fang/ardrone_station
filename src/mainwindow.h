@@ -150,6 +150,11 @@ private slots:
 
     void on_pushButton_Mannual_Position_2_clicked();
 
+    void on_checkBox_cut_area_clicked(bool checked);
+
+
+    void on_checkBox_cut_area_2_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;

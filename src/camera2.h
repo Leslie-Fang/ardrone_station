@@ -69,6 +69,10 @@ public:
     float robot_real_p[2];
     bool robot_position_updated;
 
+    /*area cut*/
+    bool bool_cut;
+    bool bool_cut_ticked;
+
 
 public slots:
     bool openCamara();      // 打开摄像头
@@ -102,11 +106,22 @@ private:
     float positive_k_average;
     float negative_k_average;
 
+    /*cut area*/
+    float n_b_max;  //k is negative, value b when b is max
+    float n_k_max;  //k is negative, value k when b is max
+    float n_b_min;
+    float n_k_min;
+    float p_b_max;
+    float p_k_max;
+    float p_b_min;
+    float p_k_min;
 
 
     /*functions*/
 
     void init_paras();
+
+    int read_saved_cross_points();
 
     float point_distance(int x1, int y1, int x2, int y2);
 
