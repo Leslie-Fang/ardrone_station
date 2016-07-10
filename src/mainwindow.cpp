@@ -97,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_Mannual_Position->setEnabled(false);
     ui->pushButton_Mannual_Position_2->setEnabled(false);
 
+    ui->pushButton_Get_Color->setEnabled(false);
+    ui->pushButton_Get_Color_2->setEnabled(false);
 
 
     //设置是否可用
@@ -472,6 +474,7 @@ void MainWindow::on_pushButton_Open_Video_clicked()
     }
     ui->pushButton_Auto_Position->setEnabled(true);
     ui->pushButton_Mannual_Position->setEnabled(true);
+    ui->pushButton_Get_Color->setEnabled(true);
 }
 
 
@@ -482,6 +485,7 @@ void MainWindow::on_pushButton_Close_Video_clicked()
     ui->pushButton_Close_Video->setEnabled(false);
     ui->pushButton_Auto_Position->setEnabled(false);
     ui->pushButton_Mannual_Position->setEnabled(false);
+     ui->pushButton_Get_Color->setEnabled(false);
 }
 
 void MainWindow::on_checkBox_clicked()
@@ -509,6 +513,7 @@ void MainWindow::on_pushButton_Open_Video_2_clicked()
     }
     ui->pushButton_Auto_Position_2->setEnabled(true);
     ui->pushButton_Mannual_Position_2->setEnabled(true);
+    ui->pushButton_Get_Color_2->setEnabled(true);
 
 }
 
@@ -520,6 +525,7 @@ void MainWindow::on_pushButton_Close_Video_2_clicked()
     ui->pushButton_Close_Video_2->setEnabled(false);
     ui->pushButton_Auto_Position_2->setEnabled(false);
     ui->pushButton_Mannual_Position_2->setEnabled(false);
+    ui->pushButton_Get_Color_2->setEnabled(false);
 }
 
 void MainWindow::camera2_Image_Slot()
@@ -777,4 +783,14 @@ void MainWindow::on_checkBox_cut_area_2_clicked(bool checked)
 {
     if(checked) camera2_video.bool_cut_ticked = true;
     else camera2_video.bool_cut_ticked = false;
+}
+
+void MainWindow::on_pushButton_Get_Color_clicked()
+{
+    camera_video.capture2 = true;
+}
+
+void MainWindow::on_pushButton_Get_Color_2_clicked()
+{
+    camera2_video.capture2 = true;
 }

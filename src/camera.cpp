@@ -11,9 +11,11 @@ using namespace std;
 extern MavrosMessage message;
 
 void onMouse(int Event,int x,int y,int flags,void* param);
+void onMouseColor(int Event,int x,int y,int flags,void* param);
 int mouse_click_counter = 0;
 int cross_points_position[5][5][2];
 int cross_points_position_save[5][5][2];
+int mouse_click_position[2] = {0,0};
 
 float cross_points_real_position_right_enemy[5][5][2] = {  //from left up corner, rows and cols
     3.15f, 1.2f, 3.15f, 0.6f, 3.15f, 0.f, 3.15f, -0.6f, 3.15f, -1.2f,
@@ -89,6 +91,7 @@ void Camera::init_paras()
 {
 
     capture = false;
+    capture2 = false;
 
     bool_cut = false;
 
@@ -422,6 +425,7 @@ int Camera::readFarme()
     }
 
     /***Find robot***/
+    position_clibration_done = true;
     if(position_clibration_done)
     {
 
@@ -636,6 +640,13 @@ int Camera::readFarme()
         cvSaveImage("/home/chg/catkin_ws/src/1.jpg",frame_raw);
         capture = false;
         auto_position();
+    }
+
+    if(capture2)
+    {
+        cvSaveImage("/home/chg/catkin_ws/src/1.jpg",frame_raw);
+        capture2 = false;
+        get_color();
     }
 
     /***Display**/
@@ -1410,6 +1421,78 @@ int Camera::mannual_position()
     return 0;
 }
 
+int Camera::get_color()
+{
+    closeCamara();
+
+    char image_name[100] = "/home/chg/catkin_ws/src/1.jpg";
+    IplImage* frame_raw_2 = cvLoadImage(image_name);
+    cout<<"Loaded!\n";
+
+    //test codes
+    IplImage* frame_raw=cvCreateImage(cvSize(raw_image_area_width,raw_image_area_height),8,3);//4:3画面
+    cvResize(frame_raw_2,frame_raw,CV_INTER_NN);
+
+    cvNamedWindow("GetColor",1);
+    cvSetMouseCallback("GetColor",onMouseColor,(void*) frame_raw);
+
+
+    //hsv空间下分离
+    IplImage* hsv = cvCreateImage(cvGetSize(frame_raw), 8, 3);
+    cvCvtColor(frame_raw, hsv, CV_BGR2HSV);
+
+    IplImage* frame_circles = cvCloneImage(frame_raw);
+
+    CvFont font;
+    cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, 1.0, 1.0);
+
+    while(1)
+    {
+        cvCopyImage(frame_raw,frame_circles);
+
+        CvScalar s;
+        s = cvGet2D(frame_raw,mouse_click_position[1],mouse_click_position[0]); // get the (i,j) pixel value
+
+        CvScalar s2;
+        s2 = cvGet2D(hsv,mouse_click_position[1],mouse_click_position[0]); // get the (i,j) pixel value
+
+        char b[10];
+        sprintf(b,"b=%d",(int)s.val[0]);
+        cvPutText(frame_circles, b, cvPoint(10,30), &font, CV_GREEN);
+        char g[10];
+        sprintf(g,"g=%d",(int)s.val[1]);
+        cvPutText(frame_circles, g, cvPoint(10,60), &font, CV_GREEN);
+        char r[10];
+        sprintf(r,"r=%d",(int)s.val[2]);
+        cvPutText(frame_circles, r, cvPoint(10,90), &font, CV_GREEN);
+
+        char h22[10];
+        sprintf(h22,"h=%d",(int)s2.val[0]);
+        cvPutText(frame_circles, h22, cvPoint(10,120), &font, CV_GREEN);
+        char s22[10];
+        sprintf(s22,"s=%d",(int)s2.val[1]);
+        cvPutText(frame_circles, s22, cvPoint(10,150), &font, CV_GREEN);
+        char v22[10];
+        sprintf(v22,"v=%d",(int)s2.val[2]);
+        cvPutText(frame_circles, v22, cvPoint(10,180), &font, CV_GREEN);
+
+        cvCircle(frame_circles, cvPoint(mouse_click_position[0],mouse_click_position[1]),6,CV_WHITE,2);
+        cvShowImage("GetColor",frame_circles);
+
+        if(cvWaitKey(300)>=0) break;
+    }
+
+
+    cvDestroyWindow("GetColor");
+    cvReleaseImage(&frame_circles);
+    cvReleaseImage(&hsv);
+    cvReleaseImage(&frame_raw);
+    cvReleaseImage(&frame_raw_2);
+
+    openCamara();
+    return 0;
+}
+
 void Camera::closeCamara()
 {
     timer->stop();         // 停止读取数据。
@@ -1620,4 +1703,14 @@ void onMouse(int Event,int x,int y,int flags,void* param)
         if(mouse_click_counter > 0)mouse_click_counter --;
     }
     else;
+}
+
+
+void onMouseColor(int Event,int x,int y,int flags,void* param)
+{
+    if(Event == CV_EVENT_LBUTTONDOWN)
+    {
+        mouse_click_position[0] = x;
+        mouse_click_position[1] = y;
+    }
 }

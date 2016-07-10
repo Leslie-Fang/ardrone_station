@@ -1136,8 +1136,8 @@
       <widget class="QPushButton" name="pushButton_Range_Update">
        <property name="geometry">
         <rect>
-         <x>400</x>
-         <y>839</y>
+         <x>370</x>
+         <y>840</y>
          <width>121</width>
          <height>41</height>
         </rect>
@@ -2295,6 +2295,32 @@
         </size>
        </property>
       </widget>
+      <widget class="QPushButton" name="pushButton_Get_Color">
+       <property name="geometry">
+        <rect>
+         <x>510</x>
+         <y>840</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>颜色识别</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_Get_Color_2">
+       <property name="geometry">
+        <rect>
+         <x>1180</x>
+         <y>840</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>颜色识别</string>
+       </property>
+      </widget>
       <zorder>layoutWidget</zorder>
       <zorder>layoutWidget</zorder>
       <zorder>label_Camera</zorder>
@@ -2316,6 +2342,8 @@
       <zorder>frame_4</zorder>
       <zorder>checkBox_cut_area</zorder>
       <zorder>checkBox_cut_area_2</zorder>
+      <zorder>pushButton_Get_Color</zorder>
+      <zorder>pushButton_Get_Color_2</zorder>
      </widget>
      <widget class="QTabWidget" name="tabWidget_PaintArea">
       <property name="geometry">

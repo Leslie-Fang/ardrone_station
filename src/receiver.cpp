@@ -40,10 +40,14 @@ void MavrosMessage::run()
     //Publish Topic
     ros::Publisher position_pub = n.advertise<geometry_msgs::Pose2D>("robot_position", 30);
   
-    ros::Rate send_loop_rate(30);
+    ros::Rate send_loop_rate(20);
+
+    position_msg.x=1000;
+    position_msg.y=1000;
 
     while(ros::ok())
     {
+
         if(camera_video.robot_position_updated)
         {
             if(camera_video.camera_enemy_side && camera_video.robot_real_p[0] > -0.3)
@@ -81,7 +85,7 @@ void MavrosMessage::run()
             }
             else ;
         }
-
+        //position_pub.publish(position_msg);
 
         ros::spinOnce();
         send_loop_rate.sleep();

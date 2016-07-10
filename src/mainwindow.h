@@ -155,6 +155,10 @@ private slots:
 
     void on_checkBox_cut_area_2_clicked(bool checked);
 
+    void on_pushButton_Get_Color_clicked();
+
+    void on_pushButton_Get_Color_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTime system_time;

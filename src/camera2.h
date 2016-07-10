@@ -65,6 +65,7 @@ public:
     int camera_number;
 
     bool capture;
+    bool capture2;
 
     float robot_real_p[2];
     bool robot_position_updated;
@@ -80,6 +81,7 @@ public slots:
     void closeCamara();     // 关闭摄像头。
     int auto_position();
     int mannual_position();
+    int get_color();
 
 private:
     QTimer *timer;

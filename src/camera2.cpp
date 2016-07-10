@@ -9,9 +9,11 @@ using namespace std;
 extern MavrosMessage message;
 
 void onMouse2(int Event,int x,int y,int flags,void* param);
+void onMouseColor2(int Event,int x,int y,int flags,void* param);
 int mouse_click_counter_2 = 0;
 int cross_points_position_2[5][5][2];
 int cross_points_position_save_2[5][5][2];
+int mouse_click_position_2[2] = {0,0};
 
 float cross_points_real_position_right_enemy_2[5][5][2] = {  //from left up corner, rows and cols
     3.15f, 1.2f, 3.15f, 0.6f, 3.15f, 0.f, 3.15f, -0.6f, 3.15f, -1.2f,
@@ -86,12 +88,13 @@ void Camera2::init_paras()
 {
 
     capture = false;
+    capture2 = false;
 
     bool_cut = false;
 
     robot_position_updated = false;
 
-    position_clibration_done = false;
+    //position_clibration_done = false;
 
     height_threshold = 0;
 
@@ -417,10 +420,12 @@ int Camera2::readFarme()
         }
     }
 
-
+    //cout<<position_clibration_done<<endl;
+    position_clibration_done = true;
     /***Find robot***/
     if(position_clibration_done)
     {
+
 
         CvScalar s_red_black;
         IplImage* red = cvCreateImage(cvGetSize(fill_color), 8, 1);
@@ -634,6 +639,12 @@ int Camera2::readFarme()
         cvSaveImage("/home/chg/catkin_ws/src/1.jpg",frame_raw);
         capture = false;
         auto_position();
+    }
+    if(capture2)
+    {
+        cvSaveImage("/home/chg/catkin_ws/src/1.jpg",frame_raw);
+        capture2 = false;
+        get_color();
     }
 
     /***Display**/
@@ -949,7 +960,7 @@ int Camera2::auto_position()
 
 
         /***Calculate Cross Points***/
-        int max_points_number = negative_k_total * positive_k_total;
+        /*int max_points_number = negative_k_total * positive_k_total;
         int cross_points_yellow[max_points_number][2]; //(x,y)
 
         for(int m = 0; m < negative_k_total; m++)
@@ -971,7 +982,7 @@ int Camera2::auto_position()
         }
 
         /***Find Useful Points***/
-        int alfa_point[2];
+        /*int alfa_point[2];
         int beta_point[2];
         int gamma_point[2];
         int theta_point[2];
@@ -1160,7 +1171,7 @@ int Camera2::auto_position()
                 delt_y_scale = fabs((float)length_point_delt_y)/fabs((float)length_point_delt_y_last) - 1.1f;
                 //cout<<"length_point_delt="<<length_point_delt_x<<","<<length_point_delt_y<<" # ";
             }
-        }
+        }*/
     }
 
     /*****Find blue lines ******/
@@ -1408,6 +1419,78 @@ int Camera2::mannual_position()
     return 0;
 }
 
+int Camera2::get_color()
+{
+    closeCamara();
+
+    char image_name[100] = "/home/chg/catkin_ws/src/1.jpg";
+    IplImage* frame_raw_2 = cvLoadImage(image_name);
+    cout<<"Loaded!\n";
+
+    //test codes
+    IplImage* frame_raw=cvCreateImage(cvSize(raw_image_area_width_2,raw_image_area_height_2),8,3);//4:3画面
+    cvResize(frame_raw_2,frame_raw,CV_INTER_NN);
+
+    cvNamedWindow("GetColor",1);
+    cvSetMouseCallback("GetColor",onMouseColor2,(void*) frame_raw);
+
+
+    //hsv空间下分离
+    IplImage* hsv = cvCreateImage(cvGetSize(frame_raw), 8, 3);
+    cvCvtColor(frame_raw, hsv, CV_BGR2HSV);
+
+    IplImage* frame_circles = cvCloneImage(frame_raw);
+
+    CvFont font;
+    cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, 1.0, 1.0);
+
+    while(1)
+    {
+        cvCopyImage(frame_raw,frame_circles);
+
+        CvScalar s;
+        s = cvGet2D(frame_raw,mouse_click_position_2[1],mouse_click_position_2[0]); // get the (i,j) pixel value
+
+        CvScalar s2;
+        s2 = cvGet2D(hsv,mouse_click_position_2[1],mouse_click_position_2[0]); // get the (i,j) pixel value
+
+        char b[10];
+        sprintf(b,"b=%d",(int)s.val[0]);
+        cvPutText(frame_circles, b, cvPoint(10,30), &font, CV_GREEN_2);
+        char g[10];
+        sprintf(g,"g=%d",(int)s.val[1]);
+        cvPutText(frame_circles, g, cvPoint(10,60), &font, CV_GREEN_2);
+        char r[10];
+        sprintf(r,"r=%d",(int)s.val[2]);
+        cvPutText(frame_circles, r, cvPoint(10,90), &font, CV_GREEN_2);
+
+        char h22[10];
+        sprintf(h22,"h=%d",(int)s2.val[0]);
+        cvPutText(frame_circles, h22, cvPoint(10,120), &font, CV_GREEN_2);
+        char s22[10];
+        sprintf(s22,"s=%d",(int)s2.val[1]);
+        cvPutText(frame_circles, s22, cvPoint(10,150), &font, CV_GREEN_2);
+        char v22[10];
+        sprintf(v22,"v=%d",(int)s2.val[2]);
+        cvPutText(frame_circles, v22, cvPoint(10,180), &font, CV_GREEN_2);
+
+        cvCircle(frame_circles, cvPoint(mouse_click_position_2[0],mouse_click_position_2[1]),6,CV_WHITE_2,2);
+        cvShowImage("GetColor",frame_circles);
+
+        if(cvWaitKey(300)>=0) break;
+    }
+
+
+    cvDestroyWindow("GetColor");
+    cvReleaseImage(&frame_circles);
+    cvReleaseImage(&hsv);
+    cvReleaseImage(&frame_raw);
+    cvReleaseImage(&frame_raw_2);
+
+    openCamara();
+    return 0;
+}
+
 void Camera2::closeCamara()
 {
     timer->stop();         // 停止读取数据。
@@ -1618,4 +1701,13 @@ void onMouse2(int Event,int x,int y,int flags,void* param)
         if(mouse_click_counter_2 > 0)mouse_click_counter_2 --;
     }
     else;
+}
+
+void onMouseColor2(int Event,int x,int y,int flags,void* param)
+{
+    if(Event == CV_EVENT_LBUTTONDOWN)
+    {
+        mouse_click_position_2[0] = x;
+        mouse_click_position_2[1] = y;
+    }
 }
